@@ -1,0 +1,17 @@
+@import url('~bootstrap/dist/css/bootstrap.css');
+@import url('~leaflet/dist/leaflet.css');
+html,
+body {
+  height: 100%;
+  weight: 100%;
+}
+
+#main_view {
+  height: 100%;
+  width: 100%;
+}
+
+#map_view {
+  height: 100%;
+}
+

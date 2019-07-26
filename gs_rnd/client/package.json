@@ -1,0 +1,40 @@
+{
+  "scripts": {
+    "build": "ASSET_PATH=\"/static/\" webpack"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.6",
+    "backbone": "^1.4.0",
+    "backbone.marionette": "^4.1.2",
+    "bootstrap": "^4.3.1",
+    "css-loader": "^3.1.0",
+    "express": "^4.17.1",
+    "file-loader": "^4.1.0",
+    "generic-pool": "^3.7.1",
+    "get": "^1.4.0",
+    "handlebars": "^4.1.2",
+    "handlebars-loader": "^1.7.1",
+    "jquery": "^3.4.1",
+    "leaflet": "^1.5.1",
+    "leaflet-draw": "^1.0.4",
+    "leaflet-mouse-position": "^1.2.0",
+    "leaflet-osm": "^0.1.0",
+    "leaflet.measurecontrol": "^1.1.0",
+    "marionette.templatecache": "^1.0.0",
+    "ol": "^5.3.3",
+    "style-loader": "^0.23.1",
+    "underscore": "^1.9.1"
+  },
+  "name": "client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "webpack": "^4.37.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
