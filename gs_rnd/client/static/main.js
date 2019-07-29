@@ -21,7 +21,9 @@ export class MainView extends View {
     constructor(options={}){
       _.defaults(options, {
         id: 'main_view',
-        template: main_view_template,
+        template: function(){
+            return main_view_template();
+        },
         regions: {
           'main_container': '.main_container'
         }
@@ -30,8 +32,7 @@ export class MainView extends View {
     }
 
     onRender(){
-      const mapView = new MapView();
+//      const mapView = new MapView();
+this.showChildView('main_container', new MapView());
     }
-
-
 };

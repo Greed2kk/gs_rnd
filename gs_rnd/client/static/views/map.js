@@ -15,15 +15,24 @@ import * as _default from '../icons/default.png';
 import template_map from '../../templates/map_view.hbs';
 
 
-export class MapView extends View {
+export class MapView extends MnView {
+//    template() {
+//        return template_map();
+//    }
     constructor(options = {}) {
         _.defaults(options, {
             id: 'map_view',
-            template: template_map,
+            template: function () {
+                return template_map();
+            },
         });
         super(options);
-        this.activeLayer = "OSM";
+
+    }
+    onAttach (){
+         this.activeLayer = "OSM";
         this.map = new Map({
+            target: 'map',
             view: new View({
                 center: fromLonLat([46.31907010112867, 47.08480340314222]),
                 zoom: 12,

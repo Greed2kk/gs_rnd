@@ -1,8 +1,5 @@
 @import url('~bootstrap/dist/css/bootstrap.css');
-@import url('~leaflet/dist/leaflet.css');
-@import url('~leaflet-draw/dist/leaflet.draw.css');
-@import url('~leaflet.measurecontrol/docs/leaflet.measurecontrol.css');
-@import url('~leaflet-mouse-position/src/L.Control.MousePosition.css');
+
 
 html,
 body {
@@ -19,3 +16,7 @@ body {
   height: 100%;
 }
 
+#map {
+  height: 100%;
+  width: 100%;
+}
