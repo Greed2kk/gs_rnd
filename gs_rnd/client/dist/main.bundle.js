@@ -80609,6 +80609,11 @@ class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
          this.activeLayer = "OSM";
         this.map = new ol__WEBPACK_IMPORTED_MODULE_4__["Map"]({
             target: 'map',
+             layers: [
+      new ol_layer_Tile__WEBPACK_IMPORTED_MODULE_7__["default"]({
+        source: new ol_source_OSM__WEBPACK_IMPORTED_MODULE_5__["default"]()
+      })
+    ],
             view: new ol__WEBPACK_IMPORTED_MODULE_4__["View"]({
                 center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([46.31907010112867, 47.08480340314222]),
                 zoom: 12,

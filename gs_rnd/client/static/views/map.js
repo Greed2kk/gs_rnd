@@ -33,6 +33,11 @@ export class MapView extends MnView {
          this.activeLayer = "OSM";
         this.map = new Map({
             target: 'map',
+             layers: [
+      new TileLayer({
+        source: new OSM()
+      })
+    ],
             view: new View({
                 center: fromLonLat([46.31907010112867, 47.08480340314222]),
                 zoom: 12,
