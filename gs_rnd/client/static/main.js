@@ -34,7 +34,4 @@ export class MainView extends View {
     }
 
 
-
-
-
 };

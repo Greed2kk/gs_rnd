@@ -1,30 +1,34 @@
-import { View } from 'backbone.marionette';
-import * as _ from 'underscore';
-import * as L from 'leaflet';
+import "ol/ol.css";
+import { View as MnView } from 'backbone.marionette';
+import _ from "underscore";
 import $ from 'jquery';
-
-import 'leaflet-osm';
-//import 'leaflet-draw';
-//import 'leaflet.measurecontrol';
-//import 'leaflet-mouse-position';
+import { Map, View } from 'ol';
+import OSM from 'ol/source/OSM';
+import * as proj from 'ol/proj';
+import TileLayer from "ol/layer/Tile";
+import { fromLonLat } from "ol/proj";
+import XYZ from 'ol/source/XYZ';
 
 import * as gas_def from '../icons/gas_def.png';
 import * as _default from '../icons/default.png';
 
+import template_map from '../../templates/map_view.hbs';
 
-import map_template from '../../templates/map_view.hbs';
 
 export class MapView extends View {
-  constructor(options={}){
-    (options, {
-      id: 'map_view',
-      template: map_template,
-    });
-    super(options);
+    constructor(options = {}) {
+        _.defaults(options, {
+            id: 'map_view',
+            template: template_map,
+        });
+        super(options);
+        this.activeLayer = "OSM";
+        this.map = new Map({
+            view: new View({
+                center: fromLonLat([46.31907010112867, 47.08480340314222]),
+                zoom: 12,
+            })
+        })
+    }
+};
 
-    this.map = L.map('map_view').setView([47.2252, 39.7096], 14);
-    new L.OSM.Mapnik().addTo(this.map);
-
-
-  }
-  };
