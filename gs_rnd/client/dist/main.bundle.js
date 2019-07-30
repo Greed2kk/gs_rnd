@@ -5641,7 +5641,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/di
 // Imports
 exports.i(__webpack_require__(/*! -!../node_modules/css-loader/dist/cjs.js!bootstrap/dist/css/bootstrap.css */ "./node_modules/css-loader/dist/cjs.js!./node_modules/bootstrap/dist/css/bootstrap.css"), "");
 // Module
-exports.push([module.i, "html,\nbody {\n  height: 100%;\n  weight: 100%;\n}\n\n#main_view {\n  height: 100%;\n  width: 100%;\n}\n\n#app {\n  height: 100%;\n  width: 100%;\n}\n", ""]);
+exports.push([module.i, "html,\nbody {\n  height: 100%;\n  weight: 100%;\n}\n\n#main_view {\n  height: 100%;\n  width: 100%;\n}\n\n#app {\n  height: 100%;\n  width: 100%;\n}\n\n\nasdasd\n.ol-popup {\n        position: absolute;\n        background-color: white;\n        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));\n        padding: 15px;\n        border-radius: 10px;\n        border: 1px solid #cccccc;\n        bottom: 12px;\n        left: -50px;\n        min-width: 280px;\n      }\n      .ol-popup:after, .ol-popup:before {\n        top: 100%;\n        border: solid transparent;\n        content: \" \";\n        height: 0;\n        width: 0;\n        position: absolute;\n        pointer-events: none;\n      }\n      .ol-popup:after {\n        border-top-color: white;\n        border-width: 10px;\n        left: 48px;\n        margin-left: -10px;\n      }\n      .ol-popup:before {\n        border-top-color: #cccccc;\n        border-width: 11px;\n        left: 48px;\n        margin-left: -11px;\n      }\n      .ol-popup-closer {\n        text-decoration: none;\n        position: absolute;\n        top: 2px;\n        right: 8px;\n      }\n      .ol-popup-closer:after {\n        content: \"✖\";\n      }", ""]);
 
 
 /***/ }),
@@ -80568,12 +80568,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ol_proj__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ol/proj */ "./node_modules/ol/proj.js");
 /* harmony import */ var ol_layer_Tile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ol/layer/Tile */ "./node_modules/ol/layer/Tile.js");
 /* harmony import */ var ol_source_XYZ__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ol/source/XYZ */ "./node_modules/ol/source/XYZ.js");
-/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../icons/gas_def.png */ "./static/icons/gas_def.png");
-/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../icons/default.png */ "./static/icons/default.png");
-/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_icons_default_png__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
-/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var ol_coordinate_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ol/coordinate.js */ "./node_modules/ol/coordinate.js");
+/* harmony import */ var ol_Overlay_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ol/Overlay.js */ "./node_modules/ol/Overlay.js");
+/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../icons/gas_def.png */ "./static/icons/gas_def.png");
+/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../icons/default.png */ "./static/icons/default.png");
+/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_icons_default_png__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../templates/popup_cords.hbs */ "./templates/popup_cords.hbs");
+/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_14__);
+
+
+
+
+
 
 
 
@@ -80591,13 +80600,15 @@ __webpack_require__.r(__webpack_exports__);
 //import template_map from '../../templates/map_view.hbs';
 
 
+
+
 class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
 
     constructor(options = {}) {
         underscore__WEBPACK_IMPORTED_MODULE_2___default.a.defaults(options, {
             id: 'main_view',
             template: function () {
-                return _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11___default()();
+                return _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_13___default()(), _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_14___default()();
             },
         });
         super(options);
@@ -80613,11 +80624,59 @@ class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
       })
     ],
             view: new ol__WEBPACK_IMPORTED_MODULE_4__["View"]({
-                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([47.24007, 39.71067]),
-                zoom: 18,
+                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([ 39.719510, 47.232462]),
+                zoom: 13,
             })
         })
+
+
+        this.map.on('singleclick', function(evt) {
+        let coordinate = evt.coordinate;
+        let hdms = Object(ol_coordinate_js__WEBPACK_IMPORTED_MODULE_9__["toStringHDMS"])(Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["toLonLat"])(coordinate));
+
+        content.innerHTML = '<p>You clicked here:</p><code>' + hdms +
+            '</code>';
+        overlay.setPosition(coordinate);
+      });
+
+
+
     }
+
+//работа с попапами
+onLeftMapClick(){
+
+const container = document.getElementById('popup');
+const content = document.getElementById('popup-content');
+const closer = document.getElementById('popup-closer');
+
+var overlay = new ol_Overlay_js__WEBPACK_IMPORTED_MODULE_10__["default"]({
+        element: container,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250
+        }
+      });
+
+closer.onclick = function() {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+      };
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
 };
 
 
@@ -80635,6 +80694,21 @@ var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js *
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"main_container\"></div>\n\n";
+},"useData":true});
+
+/***/ }),
+
+/***/ "./templates/popup_cords.hbs":
+/*!***********************************!*\
+  !*** ./templates/popup_cords.hbs ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js */ "./node_modules/handlebars/runtime.js");
+function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "  <div id=\"popup\" class=\"ol-popup\">\n      <a href=\"#\" id=\"popup-closer\" class=\"ol-popup-closer\"></a>\n      <div id=\"popup-content\"></div>\n  </div>";
 },"useData":true});
 
 /***/ })
