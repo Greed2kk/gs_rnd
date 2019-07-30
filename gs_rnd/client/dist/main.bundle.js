@@ -5641,7 +5641,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/di
 // Imports
 exports.i(__webpack_require__(/*! -!../node_modules/css-loader/dist/cjs.js!bootstrap/dist/css/bootstrap.css */ "./node_modules/css-loader/dist/cjs.js!./node_modules/bootstrap/dist/css/bootstrap.css"), "");
 // Module
-exports.push([module.i, "html,\nbody {\n  height: 100%;\n  weight: 100%;\n}\n\n#main_view {\n  height: 100%;\n  width: 100%;\n}\n\n#map_view {\n  height: 100%;\n}\n\n#map {\n  height: 100%;\n  width: 100%;\n}\n", ""]);
+exports.push([module.i, "html,\nbody {\n  height: 100%;\n  weight: 100%;\n}\n\n#main_view {\n  height: 100%;\n  width: 100%;\n}\n\n#app {\n  height: 100%;\n  width: 100%;\n}\n", ""]);
 
 
 /***/ }),
@@ -80537,7 +80537,7 @@ class MainView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] 
     }
 
     onRender(){
-//      const mapView = new MapView();
+//     const mapView = new MapView();
 this.showChildView('main_container', new _views_map_js__WEBPACK_IMPORTED_MODULE_5__["MapView"]());
     }
 };
@@ -80572,8 +80572,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../icons/default.png */ "./static/icons/default.png");
 /* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_icons_default_png__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _templates_map_view_hbs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../templates/map_view.hbs */ "./templates/map_view.hbs");
-/* harmony import */ var _templates_map_view_hbs__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_templates_map_view_hbs__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11__);
 
 
 
@@ -80588,35 +80588,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+//import template_map from '../../templates/map_view.hbs';
 
 
 class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
-//    template() {
-//        return template_map();
-//    }
+
     constructor(options = {}) {
         underscore__WEBPACK_IMPORTED_MODULE_2___default.a.defaults(options, {
-            id: 'map_view',
+            id: 'main_view',
             template: function () {
-                return _templates_map_view_hbs__WEBPACK_IMPORTED_MODULE_11___default()();
+                return _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_11___default()();
             },
         });
         super(options);
-
     }
+
     onAttach (){
-         this.activeLayer = "OSM";
+        this.activeLayer = "OSM";
         this.map = new ol__WEBPACK_IMPORTED_MODULE_4__["Map"]({
-            target: 'map',
+            target: 'main_view',
              layers: [
       new ol_layer_Tile__WEBPACK_IMPORTED_MODULE_7__["default"]({
         source: new ol_source_OSM__WEBPACK_IMPORTED_MODULE_5__["default"]()
       })
     ],
             view: new ol__WEBPACK_IMPORTED_MODULE_4__["View"]({
-                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([46.31907010112867, 47.08480340314222]),
-                zoom: 12,
+                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([47.24007, 39.71067]),
+                zoom: 18,
             })
         })
     }
@@ -80637,21 +80635,6 @@ var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js *
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"main_container\"></div>\n\n";
-},"useData":true});
-
-/***/ }),
-
-/***/ "./templates/map_view.hbs":
-/*!********************************!*\
-  !*** ./templates/map_view.hbs ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js */ "./node_modules/handlebars/runtime.js");
-function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"search-area position-fixed\">\n    <div class=\"search controls\">\n        <input type=\"text\" placeholder=\"Search for Sights\" class=\"search-bar\"/>\n    </div>\n    <div class=\"sights-list\"></div>\n</div>\n<div class=\"container position-fixed\" id=\"map\"></div>";
 },"useData":true});
 
 /***/ })

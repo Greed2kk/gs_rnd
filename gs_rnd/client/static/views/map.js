@@ -12,35 +12,33 @@ import XYZ from 'ol/source/XYZ';
 import * as gas_def from '../icons/gas_def.png';
 import * as _default from '../icons/default.png';
 
-import template_map from '../../templates/map_view.hbs';
-
+//import template_map from '../../templates/map_view.hbs';
+import main_view from '../../templates/main_view.hbs';
 
 export class MapView extends MnView {
-//    template() {
-//        return template_map();
-//    }
+
     constructor(options = {}) {
         _.defaults(options, {
-            id: 'map_view',
+            id: 'main_view',
             template: function () {
-                return template_map();
+                return main_view();
             },
         });
         super(options);
-
     }
+
     onAttach (){
-         this.activeLayer = "OSM";
+        this.activeLayer = "OSM";
         this.map = new Map({
-            target: 'map',
+            target: 'main_view',
              layers: [
       new TileLayer({
         source: new OSM()
       })
     ],
             view: new View({
-                center: fromLonLat([46.31907010112867, 47.08480340314222]),
-                zoom: 12,
+                center: fromLonLat([47.24007, 39.71067]),
+                zoom: 18,
             })
         })
     }

@@ -32,7 +32,7 @@ export class MainView extends View {
     }
 
     onRender(){
-//      const mapView = new MapView();
+//     const mapView = new MapView();
 this.showChildView('main_container', new MapView());
     }
 };

@@ -1,6 +1,5 @@
 @import url('~bootstrap/dist/css/bootstrap.css');
 
-
 html,
 body {
   height: 100%;
@@ -12,11 +11,7 @@ body {
   width: 100%;
 }
 
-#map_view {
-  height: 100%;
-}
-
-#map {
+#app {
   height: 100%;
   width: 100%;
 }
