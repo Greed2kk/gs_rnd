@@ -21,7 +21,7 @@ import {Vector as VectorLayer} from 'ol/layer.js';
 import Overlay from 'ol/Overlay.js';
 
 import * as gas_def from '../icons/gas_def.png';
-import * as default_marker from '../../templates/default.png';
+import * as default_marker from '../icons/default.png';
 
 //import template_map from '../../templates/map_view.hbs';
 import main_view from '../../templates/main_view.hbs';
@@ -168,8 +168,23 @@ var marker = new Feature({
   ),  // Cordinates of New York's Town Hall
 });
 
+var marker2 = new Feature({
+  geometry: new Point(
+   fromLonLat([39.707036018371575,47.23935570795908])
+  ),  // Cordinates of New York's Town Hall
+});
+marker2.setStyle(new Style({
+        image: new Icon(({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: default_marker,
+        }))
+    }));
+
 var vectorSource = new VectorSource({
-  features: [marker]
+  features: [marker, marker2]
+
 });
 
 var markerVectorLayer = new VectorLayer({

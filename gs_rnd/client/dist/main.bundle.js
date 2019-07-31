@@ -81922,6 +81922,17 @@ class App extends backbone_marionette__WEBPACK_IMPORTED_MODULE_0__["Application"
 
 /***/ }),
 
+/***/ "./static/icons/default.png":
+/*!**********************************!*\
+  !*** ./static/icons/default.png ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "static/icons/default.png";
+
+/***/ }),
+
 /***/ "./static/icons/gas_def.png":
 /*!**********************************!*\
   !*** ./static/icons/gas_def.png ***!
@@ -82058,8 +82069,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ol_Overlay_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ol/Overlay.js */ "./node_modules/ol/Overlay.js");
 /* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../icons/gas_def.png */ "./static/icons/gas_def.png");
 /* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _templates_default_png__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../templates/default.png */ "./templates/default.png");
-/* harmony import */ var _templates_default_png__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_templates_default_png__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../icons/default.png */ "./static/icons/default.png");
+/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_icons_default_png__WEBPACK_IMPORTED_MODULE_16__);
 /* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
 /* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17__);
 /* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../templates/popup_cords.hbs */ "./templates/popup_cords.hbs");
@@ -82234,8 +82245,23 @@ var marker = new ol_Feature_js__WEBPACK_IMPORTED_MODULE_10__["default"]({
   ),  // Cordinates of New York's Town Hall
 });
 
+var marker2 = new ol_Feature_js__WEBPACK_IMPORTED_MODULE_10__["default"]({
+  geometry: new ol_geom_Point_js__WEBPACK_IMPORTED_MODULE_9__["default"](
+   Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([39.707036018371575,47.23935570795908])
+  ),  // Cordinates of New York's Town Hall
+});
+marker2.setStyle(new ol_style_js__WEBPACK_IMPORTED_MODULE_11__["Style"]({
+        image: new ol_style_js__WEBPACK_IMPORTED_MODULE_11__["Icon"](({
+          anchor: [0.5, 46],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: _icons_default_png__WEBPACK_IMPORTED_MODULE_16__,
+        }))
+    }));
+
 var vectorSource = new ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_12__["default"]({
-  features: [marker]
+  features: [marker, marker2]
+
 });
 
 var markerVectorLayer = new ol_layer_js__WEBPACK_IMPORTED_MODULE_13__["Vector"]({
@@ -82287,17 +82313,6 @@ this.map.addLayer(markerVectorLayer);
 
 
 };
-
-/***/ }),
-
-/***/ "./templates/default.png":
-/*!*******************************!*\
-  !*** ./templates/default.png ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "templates/default.png";
 
 /***/ }),
 
