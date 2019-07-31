@@ -46143,6 +46143,53 @@ var Translate = /*@__PURE__*/(function (PointerInteraction) {
 
 /***/ }),
 
+/***/ "./node_modules/ol/layer.js":
+/*!**********************************!*\
+  !*** ./node_modules/ol/layer.js ***!
+  \**********************************/
+/*! exports provided: Group, Heatmap, Image, Layer, Tile, Vector, VectorTile */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _layer_Group_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layer/Group.js */ "./node_modules/ol/layer/Group.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Group", function() { return _layer_Group_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _layer_Heatmap_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layer/Heatmap.js */ "./node_modules/ol/layer/Heatmap.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Heatmap", function() { return _layer_Heatmap_js__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _layer_Image_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./layer/Image.js */ "./node_modules/ol/layer/Image.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Image", function() { return _layer_Image_js__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+
+/* harmony import */ var _layer_Layer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./layer/Layer.js */ "./node_modules/ol/layer/Layer.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Layer", function() { return _layer_Layer_js__WEBPACK_IMPORTED_MODULE_3__["default"]; });
+
+/* harmony import */ var _layer_Tile_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./layer/Tile.js */ "./node_modules/ol/layer/Tile.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Tile", function() { return _layer_Tile_js__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+
+/* harmony import */ var _layer_Vector_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./layer/Vector.js */ "./node_modules/ol/layer/Vector.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Vector", function() { return _layer_Vector_js__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+
+/* harmony import */ var _layer_VectorTile_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./layer/VectorTile.js */ "./node_modules/ol/layer/VectorTile.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "VectorTile", function() { return _layer_VectorTile_js__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+
+
+/**
+ * @module ol/layer
+ */
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=layer.js.map
+
+/***/ }),
+
 /***/ "./node_modules/ol/layer/Base.js":
 /*!***************************************!*\
   !*** ./node_modules/ol/layer/Base.js ***!
@@ -46692,6 +46739,428 @@ var LayerGroup = /*@__PURE__*/(function (BaseLayer) {
 /* harmony default export */ __webpack_exports__["default"] = (LayerGroup);
 
 //# sourceMappingURL=Group.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/layer/Heatmap.js":
+/*!******************************************!*\
+  !*** ./node_modules/ol/layer/Heatmap.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../events.js */ "./node_modules/ol/events.js");
+/* harmony import */ var _Object_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Object.js */ "./node_modules/ol/Object.js");
+/* harmony import */ var _dom_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../dom.js */ "./node_modules/ol/dom.js");
+/* harmony import */ var _Vector_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Vector.js */ "./node_modules/ol/layer/Vector.js");
+/* harmony import */ var _math_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../math.js */ "./node_modules/ol/math.js");
+/* harmony import */ var _obj_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../obj.js */ "./node_modules/ol/obj.js");
+/* harmony import */ var _render_EventType_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../render/EventType.js */ "./node_modules/ol/render/EventType.js");
+/* harmony import */ var _style_Icon_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../style/Icon.js */ "./node_modules/ol/style/Icon.js");
+/* harmony import */ var _style_Style_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../style/Style.js */ "./node_modules/ol/style/Style.js");
+/**
+ * @module ol/layer/Heatmap
+ */
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @typedef {Object} Options
+ * @property {number} [opacity=1] Opacity (0, 1).
+ * @property {boolean} [visible=true] Visibility.
+ * @property {import("../extent.js").Extent} [extent] The bounding extent for layer rendering.  The layer will not be
+ * rendered outside of this extent.
+ * @property {number} [zIndex] The z-index for layer rendering.  At rendering time, the layers
+ * will be ordered, first by Z-index and then by position. When `undefined`, a `zIndex` of 0 is assumed
+ * for layers that are added to the map's `layers` collection, or `Infinity` when the layer's `setMap()`
+ * method was used.
+ * @property {number} [minResolution] The minimum resolution (inclusive) at which this layer will be
+ * visible.
+ * @property {number} [maxResolution] The maximum resolution (exclusive) below which this layer will
+ * be visible.
+ * @property {Array<string>} [gradient=['#00f', '#0ff', '#0f0', '#ff0', '#f00']] The color gradient
+ * of the heatmap, specified as an array of CSS color strings.
+ * @property {number} [radius=8] Radius size in pixels.
+ * @property {number} [blur=15] Blur size in pixels.
+ * @property {number} [shadow=250] Shadow size in pixels.
+ * @property {string|function(import("../Feature.js").default):number} [weight='weight'] The feature
+ * attribute to use for the weight or a function that returns a weight from a feature. Weight values
+ * should range from 0 to 1 (and values outside will be clamped to that range).
+ * @property {import("./VectorRenderType.js").default|string} [renderMode='vector'] Render mode for vector layers:
+ *  * `'image'`: Vector layers are rendered as images. Great performance, but point symbols and
+ *    texts are always rotated with the view and pixels are scaled during zoom animations.
+ *  * `'vector'`: Vector layers are rendered as vectors. Most accurate rendering even during
+ *    animations, but slower performance.
+ * @property {import("../source/Vector.js").default} [source] Source.
+ */
+
+
+/**
+ * @enum {string}
+ * @private
+ */
+var Property = {
+  BLUR: 'blur',
+  GRADIENT: 'gradient',
+  RADIUS: 'radius'
+};
+
+
+/**
+ * @const
+ * @type {Array<string>}
+ */
+var DEFAULT_GRADIENT = ['#00f', '#0ff', '#0f0', '#ff0', '#f00'];
+
+
+/**
+ * @classdesc
+ * Layer for rendering vector data as a heatmap.
+ * Note that any property set in the options is set as a {@link module:ol/Object~BaseObject}
+ * property on the layer object; for example, setting `title: 'My Title'` in the
+ * options means that `title` is observable, and has get/set accessors.
+ *
+ * @fires import("../render/Event.js").RenderEvent
+ * @api
+ */
+var Heatmap = /*@__PURE__*/(function (VectorLayer) {
+  function Heatmap(opt_options) {
+    var options = opt_options ? opt_options : {};
+
+    var baseOptions = Object(_obj_js__WEBPACK_IMPORTED_MODULE_5__["assign"])({}, options);
+
+    delete baseOptions.gradient;
+    delete baseOptions.radius;
+    delete baseOptions.blur;
+    delete baseOptions.shadow;
+    delete baseOptions.weight;
+    VectorLayer.call(this, baseOptions);
+
+    /**
+     * @private
+     * @type {Uint8ClampedArray}
+     */
+    this.gradient_ = null;
+
+    /**
+     * @private
+     * @type {number}
+     */
+    this.shadow_ = options.shadow !== undefined ? options.shadow : 250;
+
+    /**
+     * @private
+     * @type {string|undefined}
+     */
+    this.circleImage_ = undefined;
+
+    /**
+     * @private
+     * @type {Array<Array<import("../style/Style.js").default>>}
+     */
+    this.styleCache_ = null;
+
+    Object(_events_js__WEBPACK_IMPORTED_MODULE_0__["listen"])(this,
+      Object(_Object_js__WEBPACK_IMPORTED_MODULE_1__["getChangeEventType"])(Property.GRADIENT),
+      this.handleGradientChanged_, this);
+
+    this.setGradient(options.gradient ? options.gradient : DEFAULT_GRADIENT);
+
+    this.setBlur(options.blur !== undefined ? options.blur : 15);
+
+    this.setRadius(options.radius !== undefined ? options.radius : 8);
+
+    Object(_events_js__WEBPACK_IMPORTED_MODULE_0__["listen"])(this,
+      Object(_Object_js__WEBPACK_IMPORTED_MODULE_1__["getChangeEventType"])(Property.BLUR),
+      this.handleStyleChanged_, this);
+    Object(_events_js__WEBPACK_IMPORTED_MODULE_0__["listen"])(this,
+      Object(_Object_js__WEBPACK_IMPORTED_MODULE_1__["getChangeEventType"])(Property.RADIUS),
+      this.handleStyleChanged_, this);
+
+    this.handleStyleChanged_();
+
+    var weight = options.weight ? options.weight : 'weight';
+    var weightFunction;
+    if (typeof weight === 'string') {
+      weightFunction = function(feature) {
+        return feature.get(weight);
+      };
+    } else {
+      weightFunction = weight;
+    }
+
+    this.setStyle(function(feature, resolution) {
+      var weight = weightFunction(feature);
+      var opacity = weight !== undefined ? Object(_math_js__WEBPACK_IMPORTED_MODULE_4__["clamp"])(weight, 0, 1) : 1;
+      // cast to 8 bits
+      var index = (255 * opacity) | 0;
+      var style = this.styleCache_[index];
+      if (!style) {
+        style = [
+          new _style_Style_js__WEBPACK_IMPORTED_MODULE_8__["default"]({
+            image: new _style_Icon_js__WEBPACK_IMPORTED_MODULE_7__["default"]({
+              opacity: opacity,
+              src: this.circleImage_
+            })
+          })
+        ];
+        this.styleCache_[index] = style;
+      }
+      return style;
+    }.bind(this));
+
+    // For performance reasons, don't sort the features before rendering.
+    // The render order is not relevant for a heatmap representation.
+    this.setRenderOrder(null);
+
+    Object(_events_js__WEBPACK_IMPORTED_MODULE_0__["listen"])(this, _render_EventType_js__WEBPACK_IMPORTED_MODULE_6__["default"].RENDER, this.handleRender_, this);
+  }
+
+  if ( VectorLayer ) Heatmap.__proto__ = VectorLayer;
+  Heatmap.prototype = Object.create( VectorLayer && VectorLayer.prototype );
+  Heatmap.prototype.constructor = Heatmap;
+
+  /**
+   * @return {string} Data URL for a circle.
+   * @private
+   */
+  Heatmap.prototype.createCircle_ = function createCircle_ () {
+    var radius = this.getRadius();
+    var blur = this.getBlur();
+    var halfSize = radius + blur + 1;
+    var size = 2 * halfSize;
+    var context = Object(_dom_js__WEBPACK_IMPORTED_MODULE_2__["createCanvasContext2D"])(size, size);
+    context.shadowOffsetX = context.shadowOffsetY = this.shadow_;
+    context.shadowBlur = blur;
+    context.shadowColor = '#000';
+    context.beginPath();
+    var center = halfSize - this.shadow_;
+    context.arc(center, center, radius, 0, Math.PI * 2, true);
+    context.fill();
+    return context.canvas.toDataURL();
+  };
+
+  /**
+   * Return the blur size in pixels.
+   * @return {number} Blur size in pixels.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.getBlur = function getBlur () {
+    return /** @type {number} */ (this.get(Property.BLUR));
+  };
+
+  /**
+   * Return the gradient colors as array of strings.
+   * @return {Array<string>} Colors.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.getGradient = function getGradient () {
+    return /** @type {Array<string>} */ (this.get(Property.GRADIENT));
+  };
+
+  /**
+   * Return the size of the radius in pixels.
+   * @return {number} Radius size in pixel.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.getRadius = function getRadius () {
+    return /** @type {number} */ (this.get(Property.RADIUS));
+  };
+
+  /**
+   * @private
+   */
+  Heatmap.prototype.handleGradientChanged_ = function handleGradientChanged_ () {
+    this.gradient_ = createGradient(this.getGradient());
+  };
+
+  /**
+   * @private
+   */
+  Heatmap.prototype.handleStyleChanged_ = function handleStyleChanged_ () {
+    this.circleImage_ = this.createCircle_();
+    this.styleCache_ = new Array(256);
+    this.changed();
+  };
+
+  /**
+   * @param {import("../render/Event.js").default} event Post compose event
+   * @private
+   */
+  Heatmap.prototype.handleRender_ = function handleRender_ (event) {
+    var context = event.context;
+    var canvas = context.canvas;
+    var image = context.getImageData(0, 0, canvas.width, canvas.height);
+    var view8 = image.data;
+    for (var i = 0, ii = view8.length; i < ii; i += 4) {
+      var alpha = view8[i + 3] * 4;
+      if (alpha) {
+        view8[i] = this.gradient_[alpha];
+        view8[i + 1] = this.gradient_[alpha + 1];
+        view8[i + 2] = this.gradient_[alpha + 2];
+      }
+    }
+    context.putImageData(image, 0, 0);
+  };
+
+  /**
+   * Set the blur size in pixels.
+   * @param {number} blur Blur size in pixels.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.setBlur = function setBlur (blur) {
+    this.set(Property.BLUR, blur);
+  };
+
+  /**
+   * Set the gradient colors as array of strings.
+   * @param {Array<string>} colors Gradient.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.setGradient = function setGradient (colors) {
+    this.set(Property.GRADIENT, colors);
+  };
+
+  /**
+   * Set the size of the radius in pixels.
+   * @param {number} radius Radius size in pixel.
+   * @api
+   * @observable
+   */
+  Heatmap.prototype.setRadius = function setRadius (radius) {
+    this.set(Property.RADIUS, radius);
+  };
+
+  return Heatmap;
+}(_Vector_js__WEBPACK_IMPORTED_MODULE_3__["default"]));
+
+
+/**
+ * @param {Array<string>} colors A list of colored.
+ * @return {Uint8ClampedArray} An array.
+ */
+function createGradient(colors) {
+  var width = 1;
+  var height = 256;
+  var context = Object(_dom_js__WEBPACK_IMPORTED_MODULE_2__["createCanvasContext2D"])(width, height);
+
+  var gradient = context.createLinearGradient(0, 0, width, height);
+  var step = 1 / (colors.length - 1);
+  for (var i = 0, ii = colors.length; i < ii; ++i) {
+    gradient.addColorStop(i * step, colors[i]);
+  }
+
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, width, height);
+
+  return context.getImageData(0, 0, width, height).data;
+}
+
+
+/* harmony default export */ __webpack_exports__["default"] = (Heatmap);
+
+//# sourceMappingURL=Heatmap.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/layer/Image.js":
+/*!****************************************!*\
+  !*** ./node_modules/ol/layer/Image.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LayerType_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LayerType.js */ "./node_modules/ol/LayerType.js");
+/* harmony import */ var _Layer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Layer.js */ "./node_modules/ol/layer/Layer.js");
+/**
+ * @module ol/layer/Image
+ */
+
+
+
+
+/**
+ * @typedef {Object} Options
+ * @property {number} [opacity=1] Opacity (0, 1).
+ * @property {boolean} [visible=true] Visibility.
+ * @property {import("../extent.js").Extent} [extent] The bounding extent for layer rendering.  The layer will not be
+ * rendered outside of this extent.
+ * @property {number} [zIndex] The z-index for layer rendering.  At rendering time, the layers
+ * will be ordered, first by Z-index and then by position. When `undefined`, a `zIndex` of 0 is assumed
+ * for layers that are added to the map's `layers` collection, or `Infinity` when the layer's `setMap()`
+ * method was used.
+ * @property {number} [minResolution] The minimum resolution (inclusive) at which this layer will be
+ * visible.
+ * @property {number} [maxResolution] The maximum resolution (exclusive) below which this layer will
+ * be visible.
+ * @property {import("../PluggableMap.js").default} [map] Sets the layer as overlay on a map. The map will not manage
+ * this layer in its layers collection, and the layer will be rendered on top. This is useful for
+ * temporary layers. The standard way to add a layer to a map and have it managed by the map is to
+ * use {@link module:ol/Map#addLayer}.
+ * @property {import("../source/Image.js").default} [source] Source for this layer.
+ */
+
+
+/**
+ * @classdesc
+ * Server-rendered images that are available for arbitrary extents and
+ * resolutions.
+ * Note that any property set in the options is set as a {@link module:ol/Object~BaseObject}
+ * property on the layer object; for example, setting `title: 'My Title'` in the
+ * options means that `title` is observable, and has get/set accessors.
+ *
+ * @fires import("../render/Event.js").RenderEvent
+ * @api
+ */
+var ImageLayer = /*@__PURE__*/(function (Layer) {
+  function ImageLayer(opt_options) {
+    var options = opt_options ? opt_options : {};
+    Layer.call(this, options);
+
+    /**
+     * The layer type.
+     * @protected
+     * @type {import("../LayerType.js").default}
+     */
+    this.type = _LayerType_js__WEBPACK_IMPORTED_MODULE_0__["default"].IMAGE;
+
+  }
+
+  if ( Layer ) ImageLayer.__proto__ = Layer;
+  ImageLayer.prototype = Object.create( Layer && Layer.prototype );
+  ImageLayer.prototype.constructor = ImageLayer;
+
+  return ImageLayer;
+}(_Layer_js__WEBPACK_IMPORTED_MODULE_1__["default"]));
+
+
+/**
+ * Return the associated {@link module:ol/source/Image source} of the image layer.
+ * @function
+ * @return {import("../source/Image.js").default} Source.
+ * @api
+ */
+ImageLayer.prototype.getSource;
+/* harmony default export */ __webpack_exports__["default"] = (ImageLayer);
+
+//# sourceMappingURL=Image.js.map
 
 /***/ }),
 
@@ -47464,6 +47933,196 @@ __webpack_require__.r(__webpack_exports__);
 });
 
 //# sourceMappingURL=VectorRenderType.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/layer/VectorTile.js":
+/*!*********************************************!*\
+  !*** ./node_modules/ol/layer/VectorTile.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LayerType_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../LayerType.js */ "./node_modules/ol/LayerType.js");
+/* harmony import */ var _asserts_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asserts.js */ "./node_modules/ol/asserts.js");
+/* harmony import */ var _TileProperty_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TileProperty.js */ "./node_modules/ol/layer/TileProperty.js");
+/* harmony import */ var _Vector_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Vector.js */ "./node_modules/ol/layer/Vector.js");
+/* harmony import */ var _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./VectorTileRenderType.js */ "./node_modules/ol/layer/VectorTileRenderType.js");
+/* harmony import */ var _obj_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../obj.js */ "./node_modules/ol/obj.js");
+/**
+ * @module ol/layer/VectorTile
+ */
+
+
+
+
+
+
+
+
+/**
+ * @typedef {Object} Options
+ * @property {number} [opacity=1] Opacity (0, 1).
+ * @property {boolean} [visible=true] Visibility.
+ * @property {import("../extent.js").Extent} [extent] The bounding extent for layer rendering.  The layer will not be
+ * rendered outside of this extent.
+ * @property {number} [zIndex] The z-index for layer rendering.  At rendering time, the layers
+ * will be ordered, first by Z-index and then by position. When `undefined`, a `zIndex` of 0 is assumed
+ * for layers that are added to the map's `layers` collection, or `Infinity` when the layer's `setMap()`
+ * method was used.
+ * @property {number} [minResolution] The minimum resolution (inclusive) at which this layer will be
+ * visible.
+ * @property {number} [maxResolution] The maximum resolution (exclusive) below which this layer will
+ * be visible.
+ * @property {import("../render.js").OrderFunction} [renderOrder] Render order. Function to be used when sorting
+ * features before rendering. By default features are drawn in the order that they are created. Use
+ * `null` to avoid the sort, but get an undefined draw order.
+ * @property {number} [renderBuffer=100] The buffer in pixels around the tile extent used by the
+ * renderer when getting features from the vector tile for the rendering or hit-detection.
+ * Recommended value: Vector tiles are usually generated with a buffer, so this value should match
+ * the largest possible buffer of the used tiles. It should be at least the size of the largest
+ * point symbol or line width.
+ * @property {import("./VectorTileRenderType.js").default|string} [renderMode='hybrid'] Render mode for vector tiles:
+ *  * `'image'`: Vector tiles are rendered as images. Great performance, but point symbols and texts
+ *    are always rotated with the view and pixels are scaled during zoom animations.
+ *  * `'hybrid'`: Polygon and line elements are rendered as images, so pixels are scaled during zoom
+ *    animations. Point symbols and texts are accurately rendered as vectors and can stay upright on
+ *    rotated views.
+ *  * `'vector'`: Vector tiles are rendered as vectors. Most accurate rendering even during
+ *    animations, but slower performance than the other options.
+ *
+ * When `declutter` is set to `true`, `'hybrid'` will be used instead of `'image'`.
+ * @property {import("../source/VectorTile.js").default} [source] Source.
+ * @property {import("../PluggableMap.js").default} [map] Sets the layer as overlay on a map. The map will not manage
+ * this layer in its layers collection, and the layer will be rendered on top. This is useful for
+ * temporary layers. The standard way to add a layer to a map and have it managed by the map is to
+ * use {@link module:ol/Map#addLayer}.
+ * @property {boolean} [declutter=false] Declutter images and text. Decluttering is applied to all
+ * image and text styles, and the priority is defined by the z-index of the style. Lower z-index
+ * means higher priority. When set to `true`, a `renderMode` of `'image'` will be overridden with
+ * `'hybrid'`.
+ * @property {import("../style/Style.js").StyleLike} [style] Layer style. See
+ * {@link module:ol/style} for default style which will be used if this is not defined.
+ * @property {boolean} [updateWhileAnimating=false] When set to `true`, feature batches will be
+ * recreated during animations. This means that no vectors will be shown clipped, but the setting
+ * will have a performance impact for large amounts of vector data. When set to `false`, batches
+ * will be recreated when no animation is active.
+ * @property {boolean} [updateWhileInteracting=false] When set to `true`, feature batches will be
+ * recreated during interactions. See also `updateWhileAnimating`.
+ * @property {number} [preload=0] Preload. Load low-resolution tiles up to `preload` levels. `0`
+ * means no preloading.
+ * @property {import("../render.js").OrderFunction} [renderOrder] Render order. Function to be used when sorting
+ * features before rendering. By default features are drawn in the order that they are created.
+ * @property {import("../style/Style.js").StyleLike} [style] Layer style. See
+ * {@link module:ol/style} for default style which will be used if this is not defined.
+ * @property {boolean} [useInterimTilesOnError=true] Use interim tiles on error.
+ */
+
+
+/**
+ * @classdesc
+ * Layer for vector tile data that is rendered client-side.
+ * Note that any property set in the options is set as a {@link module:ol/Object~BaseObject}
+ * property on the layer object; for example, setting `title: 'My Title'` in the
+ * options means that `title` is observable, and has get/set accessors.
+ *
+ * @param {Options=} opt_options Options.
+ * @api
+ */
+var VectorTileLayer = /*@__PURE__*/(function (VectorLayer) {
+  function VectorTileLayer(opt_options) {
+    var options = opt_options ? opt_options : {};
+
+    var renderMode = options.renderMode || _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].HYBRID;
+    Object(_asserts_js__WEBPACK_IMPORTED_MODULE_1__["assert"])(renderMode == undefined ||
+       renderMode == _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].IMAGE ||
+       renderMode == _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].HYBRID ||
+       renderMode == _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].VECTOR,
+    28); // `renderMode` must be `'image'`, `'hybrid'` or `'vector'`
+    if (options.declutter && renderMode == _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].IMAGE) {
+      renderMode = _VectorTileRenderType_js__WEBPACK_IMPORTED_MODULE_4__["default"].HYBRID;
+    }
+    options.renderMode = renderMode;
+
+    var baseOptions = /** @type {Object} */ (Object(_obj_js__WEBPACK_IMPORTED_MODULE_5__["assign"])({}, options));
+    delete baseOptions.preload;
+    delete baseOptions.useInterimTilesOnError;
+
+    VectorLayer.call(/** @type {import("./Vector.js").Options} */ this, (baseOptions));
+
+    this.setPreload(options.preload ? options.preload : 0);
+    this.setUseInterimTilesOnError(options.useInterimTilesOnError !== undefined ?
+      options.useInterimTilesOnError : true);
+
+    /**
+    * The layer type.
+    * @protected
+    * @type {import("../LayerType.js").default}
+    */
+    this.type = _LayerType_js__WEBPACK_IMPORTED_MODULE_0__["default"].VECTOR_TILE;
+
+  }
+
+  if ( VectorLayer ) VectorTileLayer.__proto__ = VectorLayer;
+  VectorTileLayer.prototype = Object.create( VectorLayer && VectorLayer.prototype );
+  VectorTileLayer.prototype.constructor = VectorTileLayer;
+
+  /**
+  * Return the level as number to which we will preload tiles up to.
+  * @return {number} The level to preload tiles up to.
+  * @observable
+  * @api
+  */
+  VectorTileLayer.prototype.getPreload = function getPreload () {
+    return /** @type {number} */ (this.get(_TileProperty_js__WEBPACK_IMPORTED_MODULE_2__["default"].PRELOAD));
+  };
+
+  /**
+  * Whether we use interim tiles on error.
+  * @return {boolean} Use interim tiles on error.
+  * @observable
+  * @api
+  */
+  VectorTileLayer.prototype.getUseInterimTilesOnError = function getUseInterimTilesOnError () {
+    return /** @type {boolean} */ (this.get(_TileProperty_js__WEBPACK_IMPORTED_MODULE_2__["default"].USE_INTERIM_TILES_ON_ERROR));
+  };
+
+  /**
+  * Set the level as number to which we will preload tiles up to.
+  * @param {number} preload The level to preload tiles up to.
+  * @observable
+  * @api
+  */
+  VectorTileLayer.prototype.setPreload = function setPreload (preload) {
+    this.set(_TileProperty_js__WEBPACK_IMPORTED_MODULE_2__["default"].PRELOAD, preload);
+  };
+
+  /**
+  * Set whether we use interim tiles on error.
+  * @param {boolean} useInterimTilesOnError Use interim tiles on error.
+  * @observable
+  * @api
+  */
+  VectorTileLayer.prototype.setUseInterimTilesOnError = function setUseInterimTilesOnError (useInterimTilesOnError) {
+    this.set(_TileProperty_js__WEBPACK_IMPORTED_MODULE_2__["default"].USE_INTERIM_TILES_ON_ERROR, useInterimTilesOnError);
+  };
+
+  return VectorTileLayer;
+}(_Vector_js__WEBPACK_IMPORTED_MODULE_3__["default"]));
+
+
+/**
+ * Return the associated {@link module:ol/source/VectorTile vectortilesource} of the layer.
+ * @function
+ * @return {import("../source/VectorTile.js").default} Source.
+ * @api
+ */
+VectorTileLayer.prototype.getSource;
+/* harmony default export */ __webpack_exports__["default"] = (VectorTileLayer);
+
+//# sourceMappingURL=VectorTile.js.map
 
 /***/ }),
 
@@ -71873,6 +72532,69 @@ RBush.prototype.concat = function concat (rbush) {
 
 /***/ }),
 
+/***/ "./node_modules/ol/style.js":
+/*!**********************************!*\
+  !*** ./node_modules/ol/style.js ***!
+  \**********************************/
+/*! exports provided: Atlas, AtlasManager, Circle, Fill, Icon, IconImage, Image, RegularShape, Stroke, Style, Text */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _style_Atlas_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style/Atlas.js */ "./node_modules/ol/style/Atlas.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Atlas", function() { return _style_Atlas_js__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _style_AtlasManager_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style/AtlasManager.js */ "./node_modules/ol/style/AtlasManager.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AtlasManager", function() { return _style_AtlasManager_js__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _style_Circle_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style/Circle.js */ "./node_modules/ol/style/Circle.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Circle", function() { return _style_Circle_js__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+
+/* harmony import */ var _style_Fill_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style/Fill.js */ "./node_modules/ol/style/Fill.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fill", function() { return _style_Fill_js__WEBPACK_IMPORTED_MODULE_3__["default"]; });
+
+/* harmony import */ var _style_Icon_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style/Icon.js */ "./node_modules/ol/style/Icon.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Icon", function() { return _style_Icon_js__WEBPACK_IMPORTED_MODULE_4__["default"]; });
+
+/* harmony import */ var _style_IconImage_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./style/IconImage.js */ "./node_modules/ol/style/IconImage.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "IconImage", function() { return _style_IconImage_js__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+
+/* harmony import */ var _style_Image_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./style/Image.js */ "./node_modules/ol/style/Image.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Image", function() { return _style_Image_js__WEBPACK_IMPORTED_MODULE_6__["default"]; });
+
+/* harmony import */ var _style_RegularShape_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./style/RegularShape.js */ "./node_modules/ol/style/RegularShape.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RegularShape", function() { return _style_RegularShape_js__WEBPACK_IMPORTED_MODULE_7__["default"]; });
+
+/* harmony import */ var _style_Stroke_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./style/Stroke.js */ "./node_modules/ol/style/Stroke.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Stroke", function() { return _style_Stroke_js__WEBPACK_IMPORTED_MODULE_8__["default"]; });
+
+/* harmony import */ var _style_Style_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./style/Style.js */ "./node_modules/ol/style/Style.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Style", function() { return _style_Style_js__WEBPACK_IMPORTED_MODULE_9__["default"]; });
+
+/* harmony import */ var _style_Text_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./style/Text.js */ "./node_modules/ol/style/Text.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Text", function() { return _style_Text_js__WEBPACK_IMPORTED_MODULE_10__["default"]; });
+
+/**
+ * @module ol/style
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=style.js.map
+
+/***/ }),
+
 /***/ "./node_modules/ol/style/Atlas.js":
 /*!****************************************!*\
   !*** ./node_modules/ol/style/Atlas.js ***!
@@ -72544,6 +73266,749 @@ Fill.prototype.getChecksum = function getChecksum () {
 
 /***/ }),
 
+/***/ "./node_modules/ol/style/Icon.js":
+/*!***************************************!*\
+  !*** ./node_modules/ol/style/Icon.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util.js */ "./node_modules/ol/util.js");
+/* harmony import */ var _ImageState_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ImageState.js */ "./node_modules/ol/ImageState.js");
+/* harmony import */ var _asserts_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asserts.js */ "./node_modules/ol/asserts.js");
+/* harmony import */ var _color_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../color.js */ "./node_modules/ol/color.js");
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../events.js */ "./node_modules/ol/events.js");
+/* harmony import */ var _events_EventType_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../events/EventType.js */ "./node_modules/ol/events/EventType.js");
+/* harmony import */ var _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./IconAnchorUnits.js */ "./node_modules/ol/style/IconAnchorUnits.js");
+/* harmony import */ var _IconImage_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./IconImage.js */ "./node_modules/ol/style/IconImage.js");
+/* harmony import */ var _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./IconOrigin.js */ "./node_modules/ol/style/IconOrigin.js");
+/* harmony import */ var _Image_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Image.js */ "./node_modules/ol/style/Image.js");
+/**
+ * @module ol/style/Icon
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @typedef {Object} Options
+ * @property {Array<number>} [anchor=[0.5, 0.5]] Anchor. Default value is the icon center.
+ * @property {import("./IconOrigin.js").default} [anchorOrigin] Origin of the anchor: `bottom-left`, `bottom-right`,
+ * `top-left` or `top-right`. Default is `top-left`.
+ * @property {import("./IconAnchorUnits.js").default} [anchorXUnits] Units in which the anchor x value is
+ * specified. A value of `'fraction'` indicates the x value is a fraction of the icon. A value of `'pixels'` indicates
+ * the x value in pixels. Default is `'fraction'`.
+ * @property {import("./IconAnchorUnits.js").default} [anchorYUnits] Units in which the anchor y value is
+ * specified. A value of `'fraction'` indicates the y value is a fraction of the icon. A value of `'pixels'` indicates
+ * the y value in pixels. Default is `'fraction'`.
+ * @property {import("../color.js").Color|string} [color] Color to tint the icon. If not specified,
+ * the icon will be left as is.
+ * @property {null|string} [crossOrigin] The `crossOrigin` attribute for loaded images. Note that you must provide a
+ * `crossOrigin` value if you are using the WebGL renderer or if you want to access pixel data with the Canvas renderer.
+ * See https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image for more detail.
+ * @property {HTMLImageElement|HTMLCanvasElement} [img] Image object for the icon. If the `src` option is not provided then the
+ * provided image must already be loaded. And in that case, it is required
+ * to provide the size of the image, with the `imgSize` option.
+ * @property {Array<number>} [offset=[0, 0]] Offset, which, together with the size and the offset origin, define the
+ * sub-rectangle to use from the original icon image.
+ * @property {import("./IconOrigin.js").default} [offsetOrigin] Origin of the offset: `bottom-left`, `bottom-right`,
+ * `top-left` or `top-right`. Default is `top-left`.
+ * @property {number} [opacity=1] Opacity of the icon.
+ * @property {number} [scale=1] Scale.
+ * @property {boolean} [rotateWithView=false] Whether to rotate the icon with the view.
+ * @property {number} [rotation=0] Rotation in radians (positive rotation clockwise).
+ * @property {import("../size.js").Size} [size] Icon size in pixel. Can be used together with `offset` to define the
+ * sub-rectangle to use from the origin (sprite) icon image.
+ * @property {import("../size.js").Size} [imgSize] Image size in pixels. Only required if `img` is set and `src` is not, and
+ * for SVG images in Internet Explorer 11. The provided `imgSize` needs to match the actual size of the image.
+ * @property {string} [src] Image source URI.
+ */
+
+
+/**
+ * @classdesc
+ * Set icon style for vector features.
+ * @api
+ */
+var Icon = /*@__PURE__*/(function (ImageStyle) {
+  function Icon(opt_options) {
+    var options = opt_options || {};
+
+    /**
+     * @type {number}
+     */
+    var opacity = options.opacity !== undefined ? options.opacity : 1;
+
+    /**
+     * @type {number}
+     */
+    var rotation = options.rotation !== undefined ? options.rotation : 0;
+
+    /**
+     * @type {number}
+     */
+    var scale = options.scale !== undefined ? options.scale : 1;
+
+    /**
+     * @type {boolean}
+     */
+    var rotateWithView = options.rotateWithView !== undefined ?
+      options.rotateWithView : false;
+
+    ImageStyle.call(this, {
+      opacity: opacity,
+      rotation: rotation,
+      scale: scale,
+      rotateWithView: rotateWithView
+    });
+
+    /**
+     * @private
+     * @type {Array<number>}
+     */
+    this.anchor_ = options.anchor !== undefined ? options.anchor : [0.5, 0.5];
+
+    /**
+     * @private
+     * @type {Array<number>}
+     */
+    this.normalizedAnchor_ = null;
+
+    /**
+     * @private
+     * @type {import("./IconOrigin.js").default}
+     */
+    this.anchorOrigin_ = options.anchorOrigin !== undefined ?
+      options.anchorOrigin : _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_LEFT;
+
+    /**
+     * @private
+     * @type {import("./IconAnchorUnits.js").default}
+     */
+    this.anchorXUnits_ = options.anchorXUnits !== undefined ?
+      options.anchorXUnits : _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION;
+
+    /**
+     * @private
+     * @type {import("./IconAnchorUnits.js").default}
+     */
+    this.anchorYUnits_ = options.anchorYUnits !== undefined ?
+      options.anchorYUnits : _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION;
+
+    /**
+     * @private
+     * @type {?string}
+     */
+    this.crossOrigin_ =
+        options.crossOrigin !== undefined ? options.crossOrigin : null;
+
+    /**
+     * @type {HTMLImageElement|HTMLCanvasElement}
+     */
+    var image = options.img !== undefined ? options.img : null;
+
+    /**
+     * @type {import("../size.js").Size}
+     */
+    var imgSize = options.imgSize !== undefined ? options.imgSize : null;
+
+    /**
+     * @type {string|undefined}
+     */
+    var src = options.src;
+
+    Object(_asserts_js__WEBPACK_IMPORTED_MODULE_2__["assert"])(!(src !== undefined && image),
+      4); // `image` and `src` cannot be provided at the same time
+    Object(_asserts_js__WEBPACK_IMPORTED_MODULE_2__["assert"])(!image || (image && imgSize),
+      5); // `imgSize` must be set when `image` is provided
+
+    if ((src === undefined || src.length === 0) && image) {
+      src = /** @type {HTMLImageElement} */ (image).src || Object(_util_js__WEBPACK_IMPORTED_MODULE_0__["getUid"])(image);
+    }
+    Object(_asserts_js__WEBPACK_IMPORTED_MODULE_2__["assert"])(src !== undefined && src.length > 0,
+      6); // A defined and non-empty `src` or `image` must be provided
+
+    /**
+     * @type {import("../ImageState.js").default}
+     */
+    var imageState = options.src !== undefined ?
+      _ImageState_js__WEBPACK_IMPORTED_MODULE_1__["default"].IDLE : _ImageState_js__WEBPACK_IMPORTED_MODULE_1__["default"].LOADED;
+
+    /**
+     * @private
+     * @type {import("../color.js").Color}
+     */
+    this.color_ = options.color !== undefined ? Object(_color_js__WEBPACK_IMPORTED_MODULE_3__["asArray"])(options.color) : null;
+
+    /**
+     * @private
+     * @type {import("./IconImage.js").default}
+     */
+    this.iconImage_ = Object(_IconImage_js__WEBPACK_IMPORTED_MODULE_7__["get"])(
+      image, /** @type {string} */ (src), imgSize, this.crossOrigin_, imageState, this.color_);
+
+    /**
+     * @private
+     * @type {Array<number>}
+     */
+    this.offset_ = options.offset !== undefined ? options.offset : [0, 0];
+
+    /**
+     * @private
+     * @type {import("./IconOrigin.js").default}
+     */
+    this.offsetOrigin_ = options.offsetOrigin !== undefined ?
+      options.offsetOrigin : _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_LEFT;
+
+    /**
+     * @private
+     * @type {Array<number>}
+     */
+    this.origin_ = null;
+
+    /**
+     * @private
+     * @type {import("../size.js").Size}
+     */
+    this.size_ = options.size !== undefined ? options.size : null;
+
+  }
+
+  if ( ImageStyle ) Icon.__proto__ = ImageStyle;
+  Icon.prototype = Object.create( ImageStyle && ImageStyle.prototype );
+  Icon.prototype.constructor = Icon;
+
+  /**
+   * Clones the style. The underlying Image/HTMLCanvasElement is not cloned.
+   * @return {Icon} The cloned style.
+   * @api
+   */
+  Icon.prototype.clone = function clone () {
+    return new Icon({
+      anchor: this.anchor_.slice(),
+      anchorOrigin: this.anchorOrigin_,
+      anchorXUnits: this.anchorXUnits_,
+      anchorYUnits: this.anchorYUnits_,
+      crossOrigin: this.crossOrigin_,
+      color: (this.color_ && this.color_.slice) ? this.color_.slice() : this.color_ || undefined,
+      src: this.getSrc(),
+      offset: this.offset_.slice(),
+      offsetOrigin: this.offsetOrigin_,
+      size: this.size_ !== null ? this.size_.slice() : undefined,
+      opacity: this.getOpacity(),
+      scale: this.getScale(),
+      rotation: this.getRotation(),
+      rotateWithView: this.getRotateWithView()
+    });
+  };
+
+  /**
+   * @inheritDoc
+   * @api
+   */
+  Icon.prototype.getAnchor = function getAnchor () {
+    if (this.normalizedAnchor_) {
+      return this.normalizedAnchor_;
+    }
+    var anchor = this.anchor_;
+    var size = this.getSize();
+    if (this.anchorXUnits_ == _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION ||
+        this.anchorYUnits_ == _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION) {
+      if (!size) {
+        return null;
+      }
+      anchor = this.anchor_.slice();
+      if (this.anchorXUnits_ == _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION) {
+        anchor[0] *= size[0];
+      }
+      if (this.anchorYUnits_ == _IconAnchorUnits_js__WEBPACK_IMPORTED_MODULE_6__["default"].FRACTION) {
+        anchor[1] *= size[1];
+      }
+    }
+
+    if (this.anchorOrigin_ != _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_LEFT) {
+      if (!size) {
+        return null;
+      }
+      if (anchor === this.anchor_) {
+        anchor = this.anchor_.slice();
+      }
+      if (this.anchorOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_RIGHT ||
+          this.anchorOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_RIGHT) {
+        anchor[0] = -anchor[0] + size[0];
+      }
+      if (this.anchorOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_LEFT ||
+          this.anchorOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_RIGHT) {
+        anchor[1] = -anchor[1] + size[1];
+      }
+    }
+    this.normalizedAnchor_ = anchor;
+    return this.normalizedAnchor_;
+  };
+
+  /**
+   * Set the anchor point. The anchor determines the center point for the
+   * symbolizer.
+   *
+   * @param {Array<number>} anchor Anchor.
+   * @api
+   */
+  Icon.prototype.setAnchor = function setAnchor (anchor) {
+    this.anchor_ = anchor;
+    this.normalizedAnchor_ = null;
+  };
+
+  /**
+   * Get the icon color.
+   * @return {import("../color.js").Color} Color.
+   * @api
+   */
+  Icon.prototype.getColor = function getColor () {
+    return this.color_;
+  };
+
+  /**
+   * Get the image icon.
+   * @param {number} pixelRatio Pixel ratio.
+   * @return {HTMLImageElement|HTMLCanvasElement} Image or Canvas element.
+   * @override
+   * @api
+   */
+  Icon.prototype.getImage = function getImage (pixelRatio) {
+    return this.iconImage_.getImage(pixelRatio);
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.getImageSize = function getImageSize () {
+    return this.iconImage_.getSize();
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.getHitDetectionImageSize = function getHitDetectionImageSize () {
+    return this.getImageSize();
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.getImageState = function getImageState () {
+    return this.iconImage_.getImageState();
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.getHitDetectionImage = function getHitDetectionImage (pixelRatio) {
+    return this.iconImage_.getHitDetectionImage(pixelRatio);
+  };
+
+  /**
+   * @inheritDoc
+   * @api
+   */
+  Icon.prototype.getOrigin = function getOrigin () {
+    if (this.origin_) {
+      return this.origin_;
+    }
+    var offset = this.offset_;
+
+    if (this.offsetOrigin_ != _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_LEFT) {
+      var size = this.getSize();
+      var iconImageSize = this.iconImage_.getSize();
+      if (!size || !iconImageSize) {
+        return null;
+      }
+      offset = offset.slice();
+      if (this.offsetOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].TOP_RIGHT ||
+          this.offsetOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_RIGHT) {
+        offset[0] = iconImageSize[0] - size[0] - offset[0];
+      }
+      if (this.offsetOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_LEFT ||
+          this.offsetOrigin_ == _IconOrigin_js__WEBPACK_IMPORTED_MODULE_8__["default"].BOTTOM_RIGHT) {
+        offset[1] = iconImageSize[1] - size[1] - offset[1];
+      }
+    }
+    this.origin_ = offset;
+    return this.origin_;
+  };
+
+  /**
+   * Get the image URL.
+   * @return {string|undefined} Image src.
+   * @api
+   */
+  Icon.prototype.getSrc = function getSrc () {
+    return this.iconImage_.getSrc();
+  };
+
+  /**
+   * @inheritDoc
+   * @api
+   */
+  Icon.prototype.getSize = function getSize () {
+    return !this.size_ ? this.iconImage_.getSize() : this.size_;
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.listenImageChange = function listenImageChange (listener, thisArg) {
+    return Object(_events_js__WEBPACK_IMPORTED_MODULE_4__["listen"])(this.iconImage_, _events_EventType_js__WEBPACK_IMPORTED_MODULE_5__["default"].CHANGE,
+      listener, thisArg);
+  };
+
+  /**
+   * Load not yet loaded URI.
+   * When rendering a feature with an icon style, the vector renderer will
+   * automatically call this method. However, you might want to call this
+   * method yourself for preloading or other purposes.
+   * @override
+   * @api
+   */
+  Icon.prototype.load = function load () {
+    this.iconImage_.load();
+  };
+
+  /**
+   * @override
+   */
+  Icon.prototype.unlistenImageChange = function unlistenImageChange (listener, thisArg) {
+    Object(_events_js__WEBPACK_IMPORTED_MODULE_4__["unlisten"])(this.iconImage_, _events_EventType_js__WEBPACK_IMPORTED_MODULE_5__["default"].CHANGE,
+      listener, thisArg);
+  };
+
+  return Icon;
+}(_Image_js__WEBPACK_IMPORTED_MODULE_9__["default"]));
+
+
+/* harmony default export */ __webpack_exports__["default"] = (Icon);
+
+//# sourceMappingURL=Icon.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/style/IconAnchorUnits.js":
+/*!**************************************************!*\
+  !*** ./node_modules/ol/style/IconAnchorUnits.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * @module ol/style/IconAnchorUnits
+ */
+
+/**
+ * Icon anchor units. One of 'fraction', 'pixels'.
+ * @enum {string}
+ */
+/* harmony default export */ __webpack_exports__["default"] = ({
+  FRACTION: 'fraction',
+  PIXELS: 'pixels'
+});
+
+//# sourceMappingURL=IconAnchorUnits.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/style/IconImage.js":
+/*!********************************************!*\
+  !*** ./node_modules/ol/style/IconImage.js ***!
+  \********************************************/
+/*! exports provided: get, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
+/* harmony import */ var _dom_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom.js */ "./node_modules/ol/dom.js");
+/* harmony import */ var _events_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../events.js */ "./node_modules/ol/events.js");
+/* harmony import */ var _events_Target_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../events/Target.js */ "./node_modules/ol/events/Target.js");
+/* harmony import */ var _events_EventType_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../events/EventType.js */ "./node_modules/ol/events/EventType.js");
+/* harmony import */ var _ImageState_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ImageState.js */ "./node_modules/ol/ImageState.js");
+/* harmony import */ var _IconImageCache_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./IconImageCache.js */ "./node_modules/ol/style/IconImageCache.js");
+/**
+ * @module ol/style/IconImage
+ */
+
+
+
+
+
+
+
+
+var IconImage = /*@__PURE__*/(function (EventTarget) {
+  function IconImage(image, src, size, crossOrigin, imageState, color) {
+
+    EventTarget.call(this);
+
+    /**
+     * @private
+     * @type {HTMLImageElement|HTMLCanvasElement}
+     */
+    this.hitDetectionImage_ = null;
+
+    /**
+     * @private
+     * @type {HTMLImageElement|HTMLCanvasElement}
+     */
+    this.image_ = !image ? new Image() : image;
+
+    if (crossOrigin !== null) {
+      /** @type {HTMLImageElement} */ (this.image_).crossOrigin = crossOrigin;
+    }
+
+    /**
+     * @private
+     * @type {HTMLCanvasElement}
+     */
+    this.canvas_ = color ?
+      /** @type {HTMLCanvasElement} */ (document.createElement('canvas')) :
+      null;
+
+    /**
+     * @private
+     * @type {import("../color.js").Color}
+     */
+    this.color_ = color;
+
+    /**
+     * @private
+     * @type {Array<import("../events.js").EventsKey>}
+     */
+    this.imageListenerKeys_ = null;
+
+    /**
+     * @private
+     * @type {import("../ImageState.js").default}
+     */
+    this.imageState_ = imageState;
+
+    /**
+     * @private
+     * @type {import("../size.js").Size}
+     */
+    this.size_ = size;
+
+    /**
+     * @private
+     * @type {string|undefined}
+     */
+    this.src_ = src;
+
+    /**
+     * @private
+     * @type {boolean|undefined}
+     */
+    this.tainted_;
+
+  }
+
+  if ( EventTarget ) IconImage.__proto__ = EventTarget;
+  IconImage.prototype = Object.create( EventTarget && EventTarget.prototype );
+  IconImage.prototype.constructor = IconImage;
+
+  /**
+   * @private
+   * @return {boolean} The image canvas is tainted.
+   */
+  IconImage.prototype.isTainted_ = function isTainted_ () {
+    if (this.tainted_ === undefined && this.imageState_ === _ImageState_js__WEBPACK_IMPORTED_MODULE_4__["default"].LOADED) {
+      this.tainted_ = false;
+      var context = Object(_dom_js__WEBPACK_IMPORTED_MODULE_0__["createCanvasContext2D"])(1, 1);
+      try {
+        context.drawImage(this.image_, 0, 0);
+        context.getImageData(0, 0, 1, 1);
+      } catch (e) {
+        this.tainted_ = true;
+      }
+    }
+    return this.tainted_ === true;
+  };
+
+  /**
+   * @private
+   */
+  IconImage.prototype.dispatchChangeEvent_ = function dispatchChangeEvent_ () {
+    this.dispatchEvent(_events_EventType_js__WEBPACK_IMPORTED_MODULE_3__["default"].CHANGE);
+  };
+
+  /**
+   * @private
+   */
+  IconImage.prototype.handleImageError_ = function handleImageError_ () {
+    this.imageState_ = _ImageState_js__WEBPACK_IMPORTED_MODULE_4__["default"].ERROR;
+    this.unlistenImage_();
+    this.dispatchChangeEvent_();
+  };
+
+  /**
+   * @private
+   */
+  IconImage.prototype.handleImageLoad_ = function handleImageLoad_ () {
+    this.imageState_ = _ImageState_js__WEBPACK_IMPORTED_MODULE_4__["default"].LOADED;
+    if (this.size_) {
+      this.image_.width = this.size_[0];
+      this.image_.height = this.size_[1];
+    }
+    this.size_ = [this.image_.width, this.image_.height];
+    this.unlistenImage_();
+    this.replaceColor_();
+    this.dispatchChangeEvent_();
+  };
+
+  /**
+   * @param {number} pixelRatio Pixel ratio.
+   * @return {HTMLImageElement|HTMLCanvasElement} Image or Canvas element.
+   */
+  IconImage.prototype.getImage = function getImage (pixelRatio) {
+    return this.canvas_ ? this.canvas_ : this.image_;
+  };
+
+  /**
+   * @return {import("../ImageState.js").default} Image state.
+   */
+  IconImage.prototype.getImageState = function getImageState () {
+    return this.imageState_;
+  };
+
+  /**
+   * @param {number} pixelRatio Pixel ratio.
+   * @return {HTMLImageElement|HTMLCanvasElement} Image element.
+   */
+  IconImage.prototype.getHitDetectionImage = function getHitDetectionImage (pixelRatio) {
+    if (!this.hitDetectionImage_) {
+      if (this.isTainted_()) {
+        var width = this.size_[0];
+        var height = this.size_[1];
+        var context = Object(_dom_js__WEBPACK_IMPORTED_MODULE_0__["createCanvasContext2D"])(width, height);
+        context.fillRect(0, 0, width, height);
+        this.hitDetectionImage_ = context.canvas;
+      } else {
+        this.hitDetectionImage_ = this.image_;
+      }
+    }
+    return this.hitDetectionImage_;
+  };
+
+  /**
+   * @return {import("../size.js").Size} Image size.
+   */
+  IconImage.prototype.getSize = function getSize () {
+    return this.size_;
+  };
+
+  /**
+   * @return {string|undefined} Image src.
+   */
+  IconImage.prototype.getSrc = function getSrc () {
+    return this.src_;
+  };
+
+  /**
+   * Load not yet loaded URI.
+   */
+  IconImage.prototype.load = function load () {
+    if (this.imageState_ == _ImageState_js__WEBPACK_IMPORTED_MODULE_4__["default"].IDLE) {
+      this.imageState_ = _ImageState_js__WEBPACK_IMPORTED_MODULE_4__["default"].LOADING;
+      this.imageListenerKeys_ = [
+        Object(_events_js__WEBPACK_IMPORTED_MODULE_1__["listenOnce"])(this.image_, _events_EventType_js__WEBPACK_IMPORTED_MODULE_3__["default"].ERROR,
+          this.handleImageError_, this),
+        Object(_events_js__WEBPACK_IMPORTED_MODULE_1__["listenOnce"])(this.image_, _events_EventType_js__WEBPACK_IMPORTED_MODULE_3__["default"].LOAD,
+          this.handleImageLoad_, this)
+      ];
+      try {
+        /** @type {HTMLImageElement} */ (this.image_).src = this.src_;
+      } catch (e) {
+        this.handleImageError_();
+      }
+    }
+  };
+
+  /**
+   * @private
+   */
+  IconImage.prototype.replaceColor_ = function replaceColor_ () {
+    if (!this.color_ || this.isTainted_()) {
+      return;
+    }
+
+    this.canvas_.width = this.image_.width;
+    this.canvas_.height = this.image_.height;
+
+    var ctx = this.canvas_.getContext('2d');
+    ctx.drawImage(this.image_, 0, 0);
+
+    var imgData = ctx.getImageData(0, 0, this.image_.width, this.image_.height);
+    var data = imgData.data;
+    var r = this.color_[0] / 255.0;
+    var g = this.color_[1] / 255.0;
+    var b = this.color_[2] / 255.0;
+
+    for (var i = 0, ii = data.length; i < ii; i += 4) {
+      data[i] *= r;
+      data[i + 1] *= g;
+      data[i + 2] *= b;
+    }
+    ctx.putImageData(imgData, 0, 0);
+  };
+
+  /**
+   * Discards event handlers which listen for load completion or errors.
+   *
+   * @private
+   */
+  IconImage.prototype.unlistenImage_ = function unlistenImage_ () {
+    this.imageListenerKeys_.forEach(_events_js__WEBPACK_IMPORTED_MODULE_1__["unlistenByKey"]);
+    this.imageListenerKeys_ = null;
+  };
+
+  return IconImage;
+}(_events_Target_js__WEBPACK_IMPORTED_MODULE_2__["default"]));
+
+
+/**
+ * @param {HTMLImageElement|HTMLCanvasElement} image Image.
+ * @param {string} src Src.
+ * @param {import("../size.js").Size} size Size.
+ * @param {?string} crossOrigin Cross origin.
+ * @param {import("../ImageState.js").default} imageState Image state.
+ * @param {import("../color.js").Color} color Color.
+ * @return {IconImage} Icon image.
+ */
+function get(image, src, size, crossOrigin, imageState, color) {
+  var iconImage = _IconImageCache_js__WEBPACK_IMPORTED_MODULE_5__["shared"].get(src, crossOrigin, color);
+  if (!iconImage) {
+    iconImage = new IconImage(image, src, size, crossOrigin, imageState, color);
+    _IconImageCache_js__WEBPACK_IMPORTED_MODULE_5__["shared"].set(src, crossOrigin, color, iconImage);
+  }
+  return iconImage;
+}
+
+
+/* harmony default export */ __webpack_exports__["default"] = (IconImage);
+
+//# sourceMappingURL=IconImage.js.map
+
+/***/ }),
+
 /***/ "./node_modules/ol/style/IconImageCache.js":
 /*!*************************************************!*\
   !*** ./node_modules/ol/style/IconImageCache.js ***!
@@ -72668,6 +74133,34 @@ function getKey(src, crossOrigin, color) {
 var shared = new IconImageCache();
 
 //# sourceMappingURL=IconImageCache.js.map
+
+/***/ }),
+
+/***/ "./node_modules/ol/style/IconOrigin.js":
+/*!*********************************************!*\
+  !*** ./node_modules/ol/style/IconOrigin.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * @module ol/style/IconOrigin
+ */
+
+/**
+ * Icon origin. One of 'bottom-left', 'bottom-right', 'top-left', 'top-right'.
+ * @enum {string}
+ */
+/* harmony default export */ __webpack_exports__["default"] = ({
+  BOTTOM_LEFT: 'bottom-left',
+  BOTTOM_RIGHT: 'bottom-right',
+  TOP_LEFT: 'top-left',
+  TOP_RIGHT: 'top-right'
+});
+
+//# sourceMappingURL=IconOrigin.js.map
 
 /***/ }),
 
@@ -80429,17 +81922,6 @@ class App extends backbone_marionette__WEBPACK_IMPORTED_MODULE_0__["Application"
 
 /***/ }),
 
-/***/ "./static/icons/default.png":
-/*!**********************************!*\
-  !*** ./static/icons/default.png ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "static/icons/default.png";
-
-/***/ }),
-
 /***/ "./static/icons/gas_def.png":
 /*!**********************************!*\
   !*** ./static/icons/gas_def.png ***!
@@ -80568,21 +82050,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ol_proj__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ol/proj */ "./node_modules/ol/proj.js");
 /* harmony import */ var ol_layer_Tile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ol/layer/Tile */ "./node_modules/ol/layer/Tile.js");
 /* harmony import */ var ol_source_XYZ__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ol/source/XYZ */ "./node_modules/ol/source/XYZ.js");
-/* harmony import */ var ol_Overlay_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ol/Overlay.js */ "./node_modules/ol/Overlay.js");
-/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../icons/gas_def.png */ "./static/icons/gas_def.png");
-/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../icons/default.png */ "./static/icons/default.png");
-/* harmony import */ var _icons_default_png__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_icons_default_png__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
-/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../templates/popup_cords.hbs */ "./templates/popup_cords.hbs");
-/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var ol_geom_Point_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ol/geom/Point.js */ "./node_modules/ol/geom/Point.js");
+/* harmony import */ var ol_Feature_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ol/Feature.js */ "./node_modules/ol/Feature.js");
+/* harmony import */ var ol_style_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ol/style.js */ "./node_modules/ol/style.js");
+/* harmony import */ var ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ol/source/Vector.js */ "./node_modules/ol/source/Vector.js");
+/* harmony import */ var ol_layer_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ol/layer.js */ "./node_modules/ol/layer.js");
+/* harmony import */ var ol_Overlay_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ol/Overlay.js */ "./node_modules/ol/Overlay.js");
+/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../icons/gas_def.png */ "./static/icons/gas_def.png");
+/* harmony import */ var _icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_icons_gas_def_png__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _templates_default_png__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../templates/default.png */ "./templates/default.png");
+/* harmony import */ var _templates_default_png__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_templates_default_png__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../templates/main_view.hbs */ "./templates/main_view.hbs");
+/* harmony import */ var _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../templates/popup_cords.hbs */ "./templates/popup_cords.hbs");
+/* harmony import */ var _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_18__);
 
 
 
 
 
 
+
+
+
+
+
+
+//для маркера
 
 
 
@@ -80599,6 +82093,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//import map_markers_view from '../../templates/map_markers_popup.hbs';
 
 class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
 
@@ -80606,30 +82101,104 @@ class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
         underscore__WEBPACK_IMPORTED_MODULE_2___default.a.defaults(options, {
             id: 'main_view',
             template: function () {
-                return _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_12___default()(), _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_13___default()();
+                return _templates_main_view_hbs__WEBPACK_IMPORTED_MODULE_17___default()(), _templates_popup_cords_hbs__WEBPACK_IMPORTED_MODULE_18___default()()
             },
         });
         super(options);
     }
+
     onAttach() {
         //работа с попапами
+        //////////////////////////////////
+
         let container = document.querySelector('#popup');
         let content = document.querySelector('#popup-content');
         let closer = document.querySelector('#popup-closer');
 
-        let overlay = new ol_Overlay_js__WEBPACK_IMPORTED_MODULE_9__["default"]({
+        let overlay = new ol_Overlay_js__WEBPACK_IMPORTED_MODULE_14__["default"]({
             element: container,
             autoPan: true,
             autoPanAnimation: {
                 duration: 250
             }
         });
+
         closer.onclick = function () {
             overlay.setPosition(undefined);
             closer.blur();
             return false;
         };
         //конец работы с попапами
+        ////////////////////////////////////////
+
+            /////////////////////////////////////////
+        //начало маркеров
+//           var iconFeature = new Feature({
+//                geometry: new Point([39.71158504486084, 47.241686602422476]),
+//                name: 'random marker',
+//                population: 4000,
+//                rainfall: 500
+//              });
+//
+//              var iconStyle = new Style({
+//                image: new Icon(/** @type {module:ol/style/Icon~Options} */ ({
+//                  anchor: [0.5, 46],
+//                  anchorXUnits: 'fraction',
+//                  anchorYUnits: 'pixels',
+//                  src: 'default.png',
+//                }))
+//              });
+//
+//              iconFeature.setStyle(iconStyle);
+//
+//              var vectorSource = new VectorSource({
+//                features: [iconFeature]
+//              });
+//
+//              var vectorLayer = new VectorLayer({
+//                source: vectorSource
+//              });
+//
+
+
+
+
+
+
+//          // display popup on click
+//          this.map.on('click', function(evt) {
+//            var feature = this.map.forEachFeatureAtPixel(evt.pixel,
+//              function(feature) {
+//                return feature;
+//              });
+//            if (feature) {
+//              var coordinates = feature.getGeometry().getCoordinates();
+//              popup.setPosition(coordinates);
+//              $(element).popover({
+//                placement: 'top',
+//                html: true,
+//                content: feature.get('name')
+//              });
+//              $(element).popover('show');
+//            } else {
+//              $(element).popover('destroy');
+//            }
+//          });
+//
+//          // change mouse cursor when over marker
+//          this.map.on('pointermove', function(e) {
+//            if (e.dragging) {
+//              $(element).popover('destroy');
+//              return;
+//            }
+//            var pixel = this.map.getEventPixel(e.originalEvent);
+//            var hit = this.map.hasFeatureAtPixel(pixel);
+//            this.map.getTarget().style.cursor = hit ? 'pointer' : '';
+//          });
+
+        //конец маркеров
+       ///////////////////////////////////////
+
 
         this.activeLayer = "OSM";
         this.map = new ol__WEBPACK_IMPORTED_MODULE_4__["Map"]({
@@ -80641,11 +82210,57 @@ class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
                 })
             ],
             view: new ol__WEBPACK_IMPORTED_MODULE_4__["View"]({
-                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([39.72570419311523, 47.234897586694956]),
+                center: Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([39.712277054786675,47.23726874200372]),
                 zoom: 14,
             })
         })
+
+//////////////////////////////попытка 2///////////////////
+/////////////////////////////////////////////////////////
+//var marker = new Feature({
+//  geometry: new Point(
+//    proj.fromLonLat([39.71158504486084, 47.241686602422476])
+//  ),  // Cordinates of New York's City Hall
+//});
+//marker.setStyle(new Style({
+//        image: new Icon (({
+//            crossOrigin: 'anonymous',
+//            src: 'default.png''
+//        }))
+//    }));
+var marker = new ol_Feature_js__WEBPACK_IMPORTED_MODULE_10__["default"]({
+  geometry: new ol_geom_Point_js__WEBPACK_IMPORTED_MODULE_9__["default"](
+   Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["fromLonLat"])([39.71158504486084, 47.241686602422476])
+  ),  // Cordinates of New York's Town Hall
+});
+
+var vectorSource = new ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_12__["default"]({
+  features: [marker]
+});
+
+var markerVectorLayer = new ol_layer_js__WEBPACK_IMPORTED_MODULE_13__["Vector"]({
+  source: vectorSource,
+});
+this.map.addLayer(markerVectorLayer);
+//////////////////////////конец попытки 2//////////////////////
+//////////////////////////////////////////////////////////////
+
+
+////////////////////кусок маркера //////////////////////////
+//      var element = document.getElementById('marker');
+//
+//          var popup = new Overlay({
+//            element: element,
+//            positioning: 'bottom-center',
+//            stopEvent: false,
+//            offset: [0, -50]
+//          });
+//          this.map.addOverlay(popup);
+///////////////////конец куска маркера////////////////////
+
+
         //попап на клик с координатами
+        //////////////////////////////////////////
         this.map.on('singleclick', function (evt) {
             let coordinate = evt.coordinate;
             let hdms = Object(ol_proj__WEBPACK_IMPORTED_MODULE_6__["toLonLat"])(coordinate);
@@ -80657,19 +82272,32 @@ class MapView extends backbone_marionette__WEBPACK_IMPORTED_MODULE_1__["View"] {
             overlay.setPosition(coordinate);
                let button = document.getElementById('userButton');
             let copy = document.getElementById('copy').textContent;
-
             button.addEventListener("click", function (event) {
-                event.preventDefault();
-                console.log(copy);
                 navigator.clipboard.writeText(copy);
                 document.execCommand("copy");
             });
             //конец копирки
+            /////////////////////////////////////////////
         });
-
     }
 
+
+
+
+
+
 };
+
+/***/ }),
+
+/***/ "./templates/default.png":
+/*!*******************************!*\
+  !*** ./templates/default.png ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "templates/default.png";
 
 /***/ }),
 
@@ -80698,7 +82326,7 @@ module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,"
 var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js */ "./node_modules/handlebars/runtime.js");
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "  <div id=\"popup\" class=\"ol-popup\">\n      <a href=\"#\" id=\"popup-closer\" class=\"ol-popup-closer\"></a>\n      <div id=\"popup-content\" ></div>\n      <button id=\"userButton\">Копировать</button>\n  </div>";
+    return "  <div id=\"popup\" class=\"ol-popup\">\n      <div id=\"marker\"></div>\n      <a href=\"#\" id=\"popup-closer\" class=\"ol-popup-closer\"></a>\n      <div id=\"popup-content\" ></div>\n      <button id=\"userButton\">Копировать</button>\n  </div>";
 },"useData":true});
 
 /***/ })
