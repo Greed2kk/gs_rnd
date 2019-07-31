@@ -13,15 +13,15 @@ import { toLonLat } from 'ol/proj.js';
 //для маркера
 import Point from 'ol/geom/Point.js';
 import Feature from 'ol/Feature.js';
-import {Icon, Style} from 'ol/style.js';
+import { Icon, Style } from 'ol/style.js';
 import VectorSource from 'ol/source/Vector.js';
-import {Vector as VectorLayer} from 'ol/layer.js';
+import { Vector as VectorLayer } from 'ol/layer.js';
 
 
 import Overlay from 'ol/Overlay.js';
 
-import * as gas_def from '../icons/gas_def.png';
 import * as default_marker from '../icons/default.png';
+import * as gas_def from '../icons/gas_def.png';
 
 //import template_map from '../../templates/map_view.hbs';
 import main_view from '../../templates/main_view.hbs';
@@ -31,204 +31,181 @@ import popup_view from '../../templates/popup_cords.hbs';
 
 export class MapView extends MnView {
 
-    constructor(options = {}) {
-        _.defaults(options, {
-            id: 'main_view',
-            template: function () {
-                return main_view(), popup_view()
-            },
-        });
-        super(options);
-    }
+  constructor(options = {}) {
+    _.defaults(options, {
+      id: 'main_view',
+      template: function () {
+        return main_view(), popup_view()
+      },
+    });
+    super(options);
+  }
 
-    onAttach() {
-        //работа с попапами
-        //////////////////////////////////
+  onAttach() {
+    //работа с попапами
+    //////////////////////////////////
 
-        let container = document.querySelector('#popup');
-        let content = document.querySelector('#popup-content');
-        let closer = document.querySelector('#popup-closer');
+    let container = document.querySelector('#popup');
+    let content = document.querySelector('#popup-content');
+    let closer = document.querySelector('#popup-closer');
 
-        let overlay = new Overlay({
-            element: container,
-            autoPan: true,
-            autoPanAnimation: {
-                duration: 250
-            }
-        });
+    let overlay = new Overlay({
+      element: container,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
 
-        closer.onclick = function () {
-            overlay.setPosition(undefined);
-            closer.blur();
-            return false;
-        };
-        //конец работы с попапами
-        ////////////////////////////////////////
+    closer.onclick = function () {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
 
-            /////////////////////////////////////////
-        //начало маркеров
-//           var iconFeature = new Feature({
-//                geometry: new Point([39.71158504486084, 47.241686602422476]),
-//                name: 'random marker',
-//                population: 4000,
-//                rainfall: 500
-//              });
-//
-//              var iconStyle = new Style({
-//                image: new Icon(/** @type {module:ol/style/Icon~Options} */ ({
-//                  anchor: [0.5, 46],
-//                  anchorXUnits: 'fraction',
-//                  anchorYUnits: 'pixels',
-//                  src: 'default.png',
-//                }))
-//              });
-//
-//              iconFeature.setStyle(iconStyle);
-//
-//              var vectorSource = new VectorSource({
-//                features: [iconFeature]
-//              });
-//
-//              var vectorLayer = new VectorLayer({
-//                source: vectorSource
-//              });
-//
-
-
-
-
-
-
-//          // display popup on click
-//          this.map.on('click', function(evt) {
-//            var feature = this.map.forEachFeatureAtPixel(evt.pixel,
-//              function(feature) {
-//                return feature;
-//              });
-//            if (feature) {
-//              var coordinates = feature.getGeometry().getCoordinates();
-//              popup.setPosition(coordinates);
-//              $(element).popover({
-//                placement: 'top',
-//                html: true,
-//                content: feature.get('name')
-//              });
-//              $(element).popover('show');
-//            } else {
-//              $(element).popover('destroy');
-//            }
-//          });
-//
-//          // change mouse cursor when over marker
-//          this.map.on('pointermove', function(e) {
-//            if (e.dragging) {
-//              $(element).popover('destroy');
-//              return;
-//            }
-//            var pixel = this.map.getEventPixel(e.originalEvent);
-//            var hit = this.map.hasFeatureAtPixel(pixel);
-//            this.map.getTarget().style.cursor = hit ? 'pointer' : '';
-//          });
-
-        //конец маркеров
-       ///////////////////////////////////////
-
-
-        this.activeLayer = "OSM";
-        this.map = new Map({
-            overlays: [overlay],
-            target: 'main_view',
-            layers: [
-                new TileLayer({
-                    source: new OSM()
-                })
-            ],
-            view: new View({
-                center: fromLonLat([39.712277054786675,47.23726874200372]),
-                zoom: 14,
-            })
+    this.activeLayer = "OSM";
+    this.map = new Map({
+      overlays: [overlay],
+      target: 'main_view',
+      layers: [
+        new TileLayer({
+          source: new OSM()
         })
+      ],
+      view: new View({
+        center: fromLonLat([39.712277054786675, 47.23726874200372]),
+        zoom: 14,
+      })
+    })
 
-//////////////////////////////попытка 2///////////////////
-/////////////////////////////////////////////////////////
-//var marker = new Feature({
-//  geometry: new Point(
-//    proj.fromLonLat([39.71158504486084, 47.241686602422476])
-//  ),  // Cordinates of New York's City Hall
-//});
-//marker.setStyle(new Style({
-//        image: new Icon (({
-//            crossOrigin: 'anonymous',
-//            src: 'default.png''
-//        }))
-//    }));
-var marker = new Feature({
-  geometry: new Point(
-   fromLonLat([39.71158504486084, 47.241686602422476])
-  ),  // Cordinates of New York's Town Hall
-});
+    ///////////////////////////маркеры//////////////
+    ///////////////////////////////////////////////
+    var marker = new Feature({
+      geometry: new Point(
+        fromLonLat([39.71158504486084, 47.241686602422476])
+      ),
+    });
 
-var marker2 = new Feature({
-  geometry: new Point(
-   fromLonLat([39.707036018371575,47.23935570795908])
-  ),  // Cordinates of New York's Town Hall
-});
-marker2.setStyle(new Style({
-        image: new Icon(({
-          anchor: [0.5, 46],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: default_marker,
-        }))
+    var marker2 = new Feature({
+      geometry: new Point(
+        fromLonLat([39.71230493509211,47.23719566405421])
+      ),
+      name: 'Null Island',
+    });
+    marker2.setStyle(new Style({
+      image: new Icon(({
+        anchor: [0.5, 46],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        src: default_marker,
+        size: [64, 64],
+        scale: 0.5,
+      }))
     }));
 
-var vectorSource = new VectorSource({
-  features: [marker, marker2]
-
-});
-
-var markerVectorLayer = new VectorLayer({
-  source: vectorSource,
-});
-this.map.addLayer(markerVectorLayer);
-//////////////////////////конец попытки 2//////////////////////
-//////////////////////////////////////////////////////////////
 
 
-////////////////////кусок маркера //////////////////////////
-//      var element = document.getElementById('marker');
+      var marker3 = new Feature({
+      geometry: new Point(
+        fromLonLat([39.71280724683311,47.24232550518022])
+      ),
+       name: 'Null Island',
+    });
+       marker3.setStyle(new Style({
+      image: new Icon(({
+        anchor: [0.5, 46],
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        src: gas_def,
+        size: [64, 64],
+        scale: 0.5,
+      }))
+    }));
+
+
+    var vectorSource = new VectorSource({
+      features: [marker, marker2, marker3]
+
+    });
+
+    var markerVectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+    this.map.addLayer(markerVectorLayer);
+
+    //////////////////////////конец маркеров//////////////////////
+    //////////////////////////////////////////////////////////////
+
+    //попап на клик с координатами
+    //////////////////////////////////////////
+    this.map.on('singleclick', function (evt) {
+      let coordinate = evt.coordinate;
+      let hdms = toLonLat(coordinate);
+
+      //конец попапа на клик с координатами
+
+      //начало копирки
+      content.innerHTML = `Координаты клика: <div id='copy'>${hdms}</div>`;
+      overlay.setPosition(coordinate);
+      let button = document.getElementById('userButton');
+      let copy = document.getElementById('copy').textContent;
+      button.addEventListener("click", function (event) {
+        navigator.clipboard.writeText(copy);
+        document.execCommand("copy");
+      });
+    });
+/////////////конец копирки
+/////////////////////////////////////////////
+
+
+////////////////////popup на маркеры /////////
+
+//    var element = document.getElementById('popup');
 //
-//          var popup = new Overlay({
-//            element: element,
-//            positioning: 'bottom-center',
-//            stopEvent: false,
-//            offset: [0, -50]
+//      var popup = new Overlay({
+//        element: element,
+//        positioning: 'bottom-center',
+//        stopEvent: false,
+//        offset: [0, -50]
+//      });
+//      this.map.addOverlay(popup);
+//
+//      // display popup on click
+//      this.map.on('click', function(evt) {
+//        var feature = this.map.forEachFeatureAtPixel(evt.pixel,
+//          function(feature) {
+//            return feature;
 //          });
-//          this.map.addOverlay(popup);
-///////////////////конец куска маркера////////////////////
+//        if (feature) {
+//          var coordinates = feature.getGeometry().getCoordinates();
+//          popup.setPosition(coordinates);
+//          $(element).popover({
+//            placement: 'top',
+//            html: true,
+//            content: feature.get('name')
+//          });
+//          $(element).popover('show');
+//        } else {
+//          $(element).popover('destroy');
+//        }
+//      });
+//
+//      // change mouse cursor when over marker
+//      this.map.on('pointermove', function(e) {
+//        if (e.dragging) {
+//          $(element).popover('destroy');
+//          return;
+//        }
+//        var pixel = this.map.getEventPixel(e.originalEvent);
+//        var hit = this.map.hasFeatureAtPixel(pixel);
+//        this.map.getTarget().style.cursor = hit ? 'pointer' : '';
+//      });
+
+////////////////////popup на маркеры /////////
 
 
-        //попап на клик с координатами
-        //////////////////////////////////////////
-        this.map.on('singleclick', function (evt) {
-            let coordinate = evt.coordinate;
-            let hdms = toLonLat(coordinate);
 
-            //конец попапа на клик с координатами
-
-            //начало копирки
-            content.innerHTML = `Координаты клика: <div id='copy'>${hdms}</div>`;
-            overlay.setPosition(coordinate);
-               let button = document.getElementById('userButton');
-            let copy = document.getElementById('copy').textContent;
-            button.addEventListener("click", function (event) {
-                navigator.clipboard.writeText(copy);
-                document.execCommand("copy");
-            });
-            //конец копирки
-            /////////////////////////////////////////////
-        });
-    }
+  }
 
 
 
