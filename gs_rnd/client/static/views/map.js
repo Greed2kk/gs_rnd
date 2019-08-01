@@ -69,7 +69,7 @@ export class MapView extends MnView {
     this.activeLayer = "OSM";
     this.map = new Map({
       overlays: [overlay],
-      target: 'test,
+      target: 'main_view',
       layers: [
         new TileLayer({
           source: new OSM()
@@ -166,6 +166,8 @@ export class MapView extends MnView {
 
 ////////////////////popup на маркеры /////////
 //
+
+
     let element = document.getElementById('marker_popup');
 
       let popup = new Overlay({
