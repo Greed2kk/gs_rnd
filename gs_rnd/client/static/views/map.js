@@ -42,6 +42,7 @@ export class MapView extends MnView {
   }
 
   onAttach() {
+
     //работа с попапами
     //////////////////////////////////
 
@@ -57,16 +58,18 @@ export class MapView extends MnView {
       }
     });
 
+
     closer.onclick = function () {
       overlay.setPosition(undefined);
       closer.blur();
       return false;
     };
 
+
     this.activeLayer = "OSM";
     this.map = new Map({
       overlays: [overlay],
-      target: 'main_view',
+      target: 'test,
       layers: [
         new TileLayer({
           source: new OSM()
@@ -80,17 +83,19 @@ export class MapView extends MnView {
 
     ///////////////////////////маркеры//////////////
     ///////////////////////////////////////////////
-    var marker = new Feature({
+    let marker = new Feature({
       geometry: new Point(
         fromLonLat([39.71158504486084, 47.241686602422476])
       ),
     });
 
-    var marker2 = new Feature({
+    let marker2 = new Feature({
       geometry: new Point(
         fromLonLat([39.71230493509211,47.23719566405421])
       ),
-      name: 'Null Island',
+      name: 'Test',
+      population: 4000,
+      rainfall: 500,
     });
     marker2.setStyle(new Style({
       image: new Icon(({
@@ -103,13 +108,13 @@ export class MapView extends MnView {
       }))
     }));
 
-
-
-      var marker3 = new Feature({
+      let marker3 = new Feature({
       geometry: new Point(
         fromLonLat([39.71280724683311,47.24232550518022])
       ),
        name: 'Null Island',
+       population: 4000,
+       rainfall: 500,
     });
        marker3.setStyle(new Style({
       image: new Icon(({
@@ -123,12 +128,12 @@ export class MapView extends MnView {
     }));
 
 
-    var vectorSource = new VectorSource({
+    let vectorSource = new VectorSource({
       features: [marker, marker2, marker3]
 
     });
 
-    var markerVectorLayer = new VectorLayer({
+    let markerVectorLayer = new VectorLayer({
       source: vectorSource,
     });
     this.map.addLayer(markerVectorLayer);
@@ -138,7 +143,7 @@ export class MapView extends MnView {
 
     //попап на клик с координатами
     //////////////////////////////////////////
-    this.map.on('singleclick', function (evt) {
+    this.map.on('contextmenu', function (evt) {
       let coordinate = evt.coordinate;
       let hdms = toLonLat(coordinate);
 
@@ -154,57 +159,65 @@ export class MapView extends MnView {
         document.execCommand("copy");
       });
     });
+
 /////////////конец копирки
 /////////////////////////////////////////////
 
 
 ////////////////////popup на маркеры /////////
+//
+    let element = document.getElementById('marker_popup');
 
-//    var element = document.getElementById('popup');
-//
-//      var popup = new Overlay({
-//        element: element,
-//        positioning: 'bottom-center',
-//        stopEvent: false,
-//        offset: [0, -50]
-//      });
-//      this.map.addOverlay(popup);
-//
-//      // display popup on click
-//      this.map.on('click', function(evt) {
-//        var feature = this.map.forEachFeatureAtPixel(evt.pixel,
-//          function(feature) {
-//            return feature;
-//          });
-//        if (feature) {
-//          var coordinates = feature.getGeometry().getCoordinates();
-//          popup.setPosition(coordinates);
-//          $(element).popover({
-//            placement: 'top',
-//            html: true,
-//            content: feature.get('name')
-//          });
-//          $(element).popover('show');
-//        } else {
-//          $(element).popover('destroy');
-//        }
-//      });
-//
+      let popup = new Overlay({
+        element: element,
+        positioning: 'bottom-center',
+        stopEvent: false,
+        offset: [0, -50]
+      });
+      this.map.addOverlay(popup);
+
+
+      // display popup on click
+      this.map.on('click', (evt) => {
+        let feature = this.map.forEachFeatureAtPixel(evt.pixel,
+          function(feature) {
+            return feature;
+          });
+        if (feature) {
+          let coordinates = feature.getGeometry().getCoordinates();
+          popup.setPosition(coordinates);
+          $(element).popover({
+            placement: 'top',
+            html: true,
+            content: feature.get('name')
+          });
+          $(element).popover('show');
+        } else {
+          $(element).popover('destroy');
+        }
+      });
+
 //      // change mouse cursor when over marker
-//      this.map.on('pointermove', function(e) {
+//      this.map.on('pointermove', (e) => {
 //        if (e.dragging) {
 //          $(element).popover('destroy');
 //          return;
 //        }
-//        var pixel = this.map.getEventPixel(e.originalEvent);
-//        var hit = this.map.hasFeatureAtPixel(pixel);
+//        let pixel = this.map.getEventPixel(e.originalEvent);
+//      let hit = this.map.hasFeatureAtPixel(pixel);
 //        this.map.getTarget().style.cursor = hit ? 'pointer' : '';
 //      });
 
 ////////////////////popup на маркеры /////////
 
 
-
+////////////////////////////////////////////////////////////////////
+///////////////отключение контекста при нажатии пкм ////////////////
+window.oncontextmenu = (function(e){                ////////////////
+    return false;                                   ////////////////
+});                                                 ////////////////
+///////////////отключение контекста при нажатии пкм ////////////////
+////////////////////////////////////////////////////////////////////
   }
 
 
