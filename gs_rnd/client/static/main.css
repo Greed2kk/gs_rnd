@@ -16,7 +16,7 @@ body {
   width: 100%;
 }
 
-.ol-mouse-position {
+.custom-mouse-position {
         background-color: rgba(0, 60, 136, .4);
         border-radius: 4px;
         color: #eee;
@@ -32,8 +32,8 @@ body {
         border-radius: 10px;
         border: 1px solid #cccccc;
         bottom: 12px;
-        left: -50px;
-        min-width: 280px;
+        left: -56px;
+        min-width: 180px;
       }
       .ol-popup:after, .ol-popup:before {
         top: 100%;
