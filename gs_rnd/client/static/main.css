@@ -21,6 +21,11 @@ body {
         border-radius: 4px;
         color: #eee;
         padding: 1px 5px;
+        position: absolute;
+        bottom: 0;
+        height: 25px;
+        width: 190px;
+        z-index: 1;
     }
 
 .ol-popup {
@@ -32,7 +37,7 @@ body {
         border-radius: 10px;
         border: 1px solid #cccccc;
         bottom: 12px;
-        left: -56px;
+        left: -50px;
         min-width: 180px;
       }
       .ol-popup:after, .ol-popup:before {

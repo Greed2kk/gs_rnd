@@ -32,7 +32,7 @@ import * as gas_def from '../icons/gas_def.png';
 import main_view from '../../templates/main_view.hbs';
 
 import popup_view from '../../templates/popup_cords.hbs';
-import controls from '../../templates/map_controls.hbs';
+
 
 //import map_markers_view from '../../templates/map_markers_popup.hbs';
 
@@ -42,7 +42,7 @@ export class MapView extends MnView {
     _.defaults(options, {
       id: 'main_view',
       template: function () {
-        return main_view(), popup_view()//, controls()
+        return main_view(), popup_view()
       },
     });
     super(options);
@@ -80,6 +80,8 @@ export class MapView extends MnView {
       target: document.getElementById('mouse-position'),
       undefinedHTML: '&nbsp;'
     });
+
+    //debugger;
 
     this.activeLayer = "OSM";
     this.map = new Map({
