@@ -1,14 +1,13 @@
-
 import * as Bb from 'backbone';
 import { View } from 'backbone.marionette';
 import * as _ from 'underscore';
 import { Radio } from 'backbone';
-
-import './main.css';
+import 'bootstrap';
 
 import { App } from './apps/app.js';
 import { MapView } from './views/map.js';
 
+import './main.css';
 
 import main_view_template from '../templates/main_view.hbs';
 
@@ -33,6 +32,6 @@ export class MainView extends View {
 
     onRender(){
 //     const mapView = new MapView();
-this.showChildView('main_container', new MapView());
+        this.showChildView('main_container', new MapView());
     }
 };

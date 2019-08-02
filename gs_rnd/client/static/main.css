@@ -16,6 +16,12 @@ body {
   width: 100%;
 }
 
+.ol-mouse-position {
+        background-color: rgba(0, 60, 136, .4);
+        border-radius: 4px;
+        color: #eee;
+        padding: 1px 5px;
+    }
 
 .ol-popup {
         position: absolute;

@@ -14,7 +14,11 @@ module.exports = {
   devtool: 'source-map',
 
   watch: true,
-
+      plugins: [
+        new webpack.ProvidePlugin({
+           jQuery: "jquery"
+       })
+    ],
   module: {
     rules: [
       {
@@ -26,7 +30,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpg|jpeg|webp|apng|gif|webm|svg|ttf|otf|woff|woff2)$/,
+        test: /\.(png|jpg|jpeg|eot|apng|gif|webm|svg|ttf|otf|woff|woff2)$/,
         use: [
           {
             loader: 'file-loader',
