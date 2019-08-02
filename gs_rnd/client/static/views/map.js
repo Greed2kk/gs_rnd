@@ -13,7 +13,6 @@ import { defaults as defaultControls } from 'ol/control.js';
 import MousePosition from 'ol/control/MousePosition.js';
 import { click } from 'ol/events/condition.js';
 import Select from 'ol/interaction/Select.js';
-import {createStringXY} from 'ol/coordinate.js';
 
 //для маркера
 import Point from 'ol/geom/Point.js';
@@ -21,7 +20,6 @@ import Feature from 'ol/Feature.js';
 import { Icon, Style } from 'ol/style.js';
 import VectorSource from 'ol/source/Vector.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
-
 
 import Overlay from 'ol/Overlay.js';
 
@@ -38,24 +36,27 @@ import popup_view from '../../templates/popup_cords.hbs';
 
 export class MapView extends MnView {
 
-  constructor(options = {}) {
-    _.defaults(options, {
-      id: 'main_view',
-      template: function () {
-        return main_view(), popup_view()
-      },
-    });
-    super(options);
+  template() {
+    return main_view(), popup_view();
   }
 
+  ui() {
+    return {
+        'popup': '#popup',
+        'content': '#popup-content',
+        'closer': '#popup-closer',
+    };
+  }
+
+
+
   onAttach() {
-
-    var container = document.querySelector('#popup');
-    var content = document.querySelector('#popup-content');
-    var closer = document.querySelector('#popup-closer');
-
+//    var container = document.querySelector('#popup');
+//    var content = document.querySelector('#popup-content');
+//    var closer = document.querySelector('#popup-closer');
+   // debugger
     var overlay = new Overlay({
-      element: container,
+      element: this.ui.popup[0],
       autoPan: false,
       autoPanMargin: 200,
       autoPanAnimation: {
@@ -65,19 +66,24 @@ export class MapView extends MnView {
 
     overlay.setOffset([0, -20]);
 
-    closer.onclick = function () {
-      overlay.setPosition(undefined);
-      closer.blur();
-      return false;
-    };
+    this.ui.closer.on('click', () => {
+        overlay.setPosition(undefined);
+        this.ui.closer.blur();
+        return false;
+    })
+
+    function customLatLng(coord) {
+        const [ lat, lng ] = coord;
+        return `Lat:${lat.toFixed(2)} Lon:${lng.toFixed(2)}`;
+    }
 
     var mousePositionControl = new MousePosition({
-      coordinateFormat: createStringXY(4),
+      coordinateFormat: customLatLng,
       projection: 'EPSG:4326',
       // comment the following two lines to have the mouse position
       // be placed within the map.
       className: 'custom-mouse-position',
-      target: document.getElementById('mouse-position'),
+     // target: document.getElementById('mouse-position'),
       undefinedHTML: '&nbsp;'
     });
 
@@ -148,10 +154,10 @@ export class MapView extends MnView {
     this.map.addLayer(markerVectorLayer);
 
     this.map.on('click', (e) => {
-      this.map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+      this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
         console.log(`Координаты ${feature.getGeometry().getCoordinates()}`);
         const coordinate = feature.getGeometry().getCoordinates();
-        content.innerHTML = `Это маркер: ${feature.values_.name}`;
+        this.ui.content.html(`Это маркер: ${feature.values_.name}`);
         overlay.setPosition(coordinate);
       })
     })
