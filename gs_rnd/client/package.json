@@ -16,6 +16,7 @@
     "handlebars": "^4.1.2",
     "handlebars-loader": "^1.7.1",
     "jquery": "^3.4.1",
+    "jshint": "^2.10.2",
     "leaflet": "^1.5.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-mouse-position": "^1.2.0",

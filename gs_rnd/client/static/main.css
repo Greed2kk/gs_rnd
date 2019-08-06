@@ -76,6 +76,19 @@ body {
     content: "✖";
 }
 
+
+/* .custom-mouse-position {
+    background-color: rgba(0, 60, 136, .4);
+    border-radius: 4px;
+    color: #eee;
+    padding: 1px 5px;
+    position: absolute;
+    bottom: 0;
+    height: 25px;
+    width: 190px;
+    z-index: 1;
+} */
+
 .search {
     text-align: center;
 }
@@ -90,6 +103,7 @@ body {
     top: 100px;
     right: 30px;
     max-width: 300px;
+    position: absolute;
     display: block;
     color: #2f3d44;
     background: rgb(228, 228, 228, 0.9);
