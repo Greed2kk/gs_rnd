@@ -51,7 +51,7 @@ export class MapView extends MnView {
                 duration: 250
             }
         });
-
+        this.overlay = overlay;
         overlay.setOffset([0, -20]);
 
         this.ui.closer.on("click", () => {
@@ -120,12 +120,14 @@ export class MapView extends MnView {
 
         this.map.addLayer(markerVectorLayer);
 
+
         this.map.on("click", e => {
             this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
                 console.log(`Координаты ${feature.getGeometry().getCoordinates()}`);
                 const coordinate = feature.getGeometry().getCoordinates();
                 this.ui.content.html(`Это маркер: ${feature.values_.name}`);
                 overlay.setPosition(coordinate);
+
             });
         });
 
@@ -138,18 +140,37 @@ export class MapView extends MnView {
         const model = this.getOption("collection").on(
             "change:selected",
             (model, value, options) => {
+                //console.log(model);
                 if (value) {
                     function show() {
                         const coords = model.get("geometry");
                         return fromLonLat(coords);
                     }
-                    let coords = show();
+                    const coords = show();
 
-                    function flyTo(location, done) {
-                        let duration = 2000;
+                    let name = model.get("name");
+                    console.log(coords);
+                    //console.log(name);
+                    setTimeout(() => {
+                        this.ui.content.html(`Это маркер: ${name}`);
+                        this.overlay.setPosition(coords);
+                    }, 3000);
+
+                    function flyTo(location, view, done) {
+                        const duration = 2000;
                         let zoom = view.getZoom();
                         let parts = 2;
                         let called = false;
+                        const maxZoom = 19;
+                        const minZoom = 15
+                        if (zoom >= minZoom) {
+                            zoom = minZoom;
+                        } else {
+                            zoom = zoom;
+                        }
+                        // if ((location == view.getCenter()) && (maxZoom == view.getZoom())) {
+                        //     console.log('нельзя один и тот же маркер зумить ;<');
+                        // }
 
                         function callback(complete) {
                             --parts;
@@ -161,7 +182,6 @@ export class MapView extends MnView {
                                 done(complete);
                             }
                         }
-                        console.log(location);
 
                         view.animate({
                                 center: location,
@@ -170,23 +190,25 @@ export class MapView extends MnView {
                             callback
                         );
                         view.animate({
-                                zoom: zoom - 1,
+                                zoom: zoom,
                                 duration: duration / 2
                             }, {
-                                zoom: zoom,
+                                zoom: maxZoom,
                                 duration: duration / 2
                             },
                             callback
                         );
+
+
                     }
 
                     setTimeout(() => {
-                        flyTo(coords, function() {
+                        flyTo(coords, view, function() {
                             console.log("done");
                         });
                     }, 500);
+
                 }
-            }
-        );
+            });
     }
 }
