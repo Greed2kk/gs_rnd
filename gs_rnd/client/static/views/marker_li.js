@@ -6,18 +6,31 @@ import $ from 'jquery';
 import markerList from '../../templates/list_view.hbs';
 import { MapView } from './map.js';
 
+import './marker_li.scss';
+
 class GasStationView extends View {
     template(data) {
-            return `${data.name}`;
-        }
-        // events() {
-        //     return {
-        //         'click': 'onClick'
-        //     }
-        // }
-        // onClick() {
-        //     this.trigger('child:click', this);
-        // }
+        return `<div>${data.name}</div>`;
+    }
+
+    modelEvents() {
+        return {
+            'change': 'render',
+        };
+    }
+
+    onRender() {
+        this.$el.toggleClass('selected', this.model.get('selected'));
+    }
+
+    // events() {
+    //     return {
+    //         'click': 'onClick'
+    //     }
+    // }
+    // onClick() {
+    //     this.trigger('child:click', this);
+    // }
     triggers() {
         return {
             'click': 'child:click',

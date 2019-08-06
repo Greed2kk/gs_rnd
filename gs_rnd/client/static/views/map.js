@@ -1,26 +1,47 @@
 import "ol/ol.css";
-import { View as MnView } from 'backbone.marionette';
-import { Map, View } from 'ol';
+import {
+    View as MnView
+} from 'backbone.marionette';
+import {
+    Map,
+    View
+} from 'ol';
 import OSM from 'ol/source/OSM';
 import * as proj from 'ol/proj';
 import TileLayer from "ol/layer/Tile";
-import { fromLonLat } from "ol/proj";
+import {
+    fromLonLat
+} from "ol/proj";
 import XYZ from 'ol/source/XYZ';
-import { toLonLat } from 'ol/proj.js';
-import { defaults as defaultControls } from 'ol/control.js';
+import {
+    toLonLat
+} from 'ol/proj.js';
+import {
+    defaults as defaultControls
+} from 'ol/control.js';
 import MousePosition from 'ol/control/MousePosition.js';
-import { click } from 'ol/events/condition.js';
+import {
+    click
+} from 'ol/events/condition.js';
 import Select from 'ol/interaction/Select.js';
 
 import Zoom from 'ol/control/Zoom';
-import { easeIn, easeOut } from 'ol/easing.js';
+import {
+    easeIn,
+    easeOut
+} from 'ol/easing.js';
 
 //для маркера
 import Point from 'ol/geom/Point.js';
 import Feature from 'ol/Feature.js';
-import { Icon, Style } from 'ol/style.js';
+import {
+    Icon,
+    Style
+} from 'ol/style.js';
 import VectorSource from 'ol/source/Vector.js';
-import { Vector as VectorLayer } from 'ol/layer.js';
+import {
+    Vector as VectorLayer
+} from 'ol/layer.js';
 
 import Overlay from 'ol/Overlay.js';
 
@@ -44,10 +65,6 @@ export class MapView extends MnView {
             's-list': '.sights-list',
             'cter': '.container',
         };
-    }
-
-    onRender() {
-        this.initListeners();
     }
 
     onAttach() {
@@ -81,7 +98,6 @@ export class MapView extends MnView {
         });
 
         this.activeLayer = "OSM";
-
         this.map = new Map({
             controls: defaultControls().extend([mousePositionControl]),
             overlays: [overlay],
@@ -95,10 +111,16 @@ export class MapView extends MnView {
                 center: fromLonLat([39.712277054786675, 47.23726874200372]),
                 zoom: 14,
             })
-        })
-        const { collection } = this.options;
+        });
+        const {
+            collection
+        } = this.options;
         const features = collection.map(item => {
-            const { geometry, name, image } = item.pick('geometry', 'name', 'image');
+            const {
+                geometry,
+                name,
+                image
+            } = item.pick('geometry', 'name', 'image');
             const feature = new Feature({
                 name,
                 geometry: new Point(fromLonLat(geometry)),
@@ -136,70 +158,60 @@ export class MapView extends MnView {
             })
         })
 
-        // function showAllMarkersMenu() {
-        //     this.$el.find('.sights-list').text(this.marker.name).bind('click', onClick.bind(null, this.marker));
-        //     $('.container').append(this.$el);
-        // }
-
-        // vectorSource.forEach(function(marker) {
-
-        // });
+        this.initListeners();
     }
 
     initListeners() {
-
-        var view = new View({
-            center: [39.712277054786675, 47.23726874200372],
-            zoom: 14,
-        });
+        const view = this.map.getView();
 
         const model = this.getOption('collection').on('change:selected', (model, value, options) => {
-            //console.log(model.attributes);
 
-            //console.log(coordsNew);
-            //console.log(value);
-            //view.animate({ zoom: 16 }, { center: coords });
-            function show() {
-                const coords = model.get("geometry");
+            if (value) {
+                function show() {
+                    const coords = model.get("geometry");
+                    return coords;
+                }
+                let coords = show();
                 console.log(coords);
-                return coords;
+
+                function flyTo(location, done) {
+                    var duration = 2000;
+                    var zoom = view.getZoom();
+                    var parts = 2;
+                    var called = false;
+
+                    function callback(complete) {
+                        --parts;
+                        if (called) {
+                            return;
+                        }
+                        if (parts === 0 || !complete) {
+                            called = true;
+                            done(complete);
+                        }
+                    }
+                    view.animate({
+                        center: location,
+                        duration: duration
+                    }, callback);
+                    view.animate({
+                        zoom: zoom - 1,
+                        duration: duration / 2
+                    }, {
+                        zoom: zoom,
+                        duration: duration / 2
+                    }, callback);
+                }
+
+                setTimeout(() => {
+                    flyTo(coords, function() {
+                        console.log('done');
+                    });
+                }, 500)
 
             }
-            show();
 
         });
 
-
-        function flyTo(location, done) {
-            var duration = 2000;
-            var zoom = view.getZoom();
-            var parts = 2;
-            var called = false;
-
-            function callback(complete) {
-                --parts;
-                if (called) {
-                    return;
-                }
-                if (parts === 0 || !complete) {
-                    called = true;
-                    done(complete);
-                }
-            }
-            view.animate({
-                center: location,
-                duration: duration
-            }, callback);
-            view.animate({
-                zoom: zoom - 1,
-                duration: duration / 2
-            }, {
-                zoom: zoom,
-                duration: duration / 2
-            }, callback);
-        }
-        const test = [39.71230493509211, 47.23719566405421];
-        console.log(model);
-        flyTo(test, function() {});
     }
 };
