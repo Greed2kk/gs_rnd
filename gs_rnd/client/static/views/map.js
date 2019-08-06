@@ -151,10 +151,10 @@ export class MapView extends MnView {
                     let name = model.get("name");
                     console.log(coords);
                     //console.log(name);
-                    setTimeout(() => {
-                        this.ui.content.html(`Это маркер: ${name}`);
-                        this.overlay.setPosition(coords);
-                    }, 3000);
+                    // setTimeout(() => {
+                    //     this.ui.content.html(`Это маркер: ${name}`);
+                    //     this.overlay.setPosition(coords);
+                    // }, 3000);
 
                     function flyTo(location, view, done) {
                         const duration = 2000;
@@ -199,11 +199,12 @@ export class MapView extends MnView {
                             callback
                         );
 
-
                     }
 
                     setTimeout(() => {
-                        flyTo(coords, view, function() {
+                        flyTo(coords, view, () => {
+                            this.ui.content.html(`Это маркер: ${name}`);
+                            this.overlay.setPosition(coords);
                             console.log("done");
                         });
                     }, 500);
