@@ -5,11 +5,13 @@ import 'bootstrap';
 import { App } from './apps/app.js';
 import { MapView } from './views/map.js';
 import { MarkerView } from './views/marker_li.js';
-//import markerList from '../../templates/map_view.hbs';
+import { MarkerInfoView } from './views/marker_info.js';
+
+
+import 'bootstrap/dist/css/bootstrap.css';
 import './main.css';
 
 import main_view_template from '../templates/main_view.hbs';
-
 
 document.addEventListener("DOMContentLoaded", () => {
     new App().start();
@@ -23,8 +25,9 @@ export class MainView extends View {
                 return main_view_template();
             },
             regions: {
-                'map': '.map-container',
-                'list': '.list-container'
+                'map': '.map-view-container',
+                'list': '.list-view-container',
+                'info': '.info-view-container',
             }
         })
         super(options);
@@ -44,14 +47,16 @@ export class MainView extends View {
                 selected: false,
             }
         ]);
+
+        this.showChildView('info', new MarkerInfoView({
+            collection: gasStationCollection,
+        }));
+
         this.showChildView('list', new MarkerView({
             collection: gasStationCollection,
         }));
         this.showChildView('map', new MapView({
             collection: gasStationCollection,
         }));
-        // markerView.options.model.on('all', function(model) {
-        //     this.showChildView('main_container', mapView);
-        // }, this);
     }
 };

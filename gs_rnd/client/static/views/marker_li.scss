@@ -1,3 +1,48 @@
 .selected {
-    background-color: aqua;
+    .sight {
+        background-color: rgb(209, 97, 46);
+    }
+}
+
+.selected>.sight {
+    background-color: rgb(209, 97, 46);
+}
+
+.info {
+    overflow-y: scroll;
+    max-height: 690px;
+}
+
+.markers-info {
+    z-index: 401;
+    min-height: 400px;
+    min-width: 200px;
+    top: 100px;
+    left: 30px;
+    max-width: 300px;
+    position: absolute;
+    display: block;
+    color: #2f3d44;
+    background: rgb(228, 228, 228, 0.9);
+    justify-content: center;
+    padding: 10px;
+    border-radius: 5px;
+    border-width: thin;
+    border-style: dashed;
+    border-color: #99b8b8;
+}
+
+.sight {
+    min-width: 100px;
+    height: 100%;
+    background-color: #aacbcb;
+    margin-top: 20px;
+    border-width: 2px;
+    border-radius: 5px;
+    border-color: #808080;
+    padding: 10px;
+    float: centr;
+    border-width: thin;
+    border-style: dashed;
+    border-color: #99b8b8;
 }

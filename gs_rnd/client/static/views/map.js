@@ -11,6 +11,7 @@ import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
 import { click } from "ol/events/condition.js";
 import Select from "ol/interaction/Select.js";
+import Overlay from "ol/Overlay.js";
 
 import Zoom from "ol/control/Zoom";
 import { easeIn, easeOut } from "ol/easing.js";
@@ -22,16 +23,21 @@ import { Icon, Style } from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 
-import Overlay from "ol/Overlay.js";
 
-//import template_map from '../../templates/map_view.hbs';
-import main_view from "../../templates/main_view.hbs";
-import popup_view from "../../templates/popup_cords.hbs";
-//import map_markers_view from '../../templates/map_markers_popup.hbs';
+import map_view from "../../templates/map_view.hbs";
+//import popup_view from '../../templates/popup_view.hbs';
 
 export class MapView extends MnView {
+    tagName() {
+        return 'div';
+    }
+
+    className() {
+        return 'map-container';
+    }
+
     template() {
-        return main_view(), popup_view();
+        return map_view();
     }
 
     ui() {
@@ -39,6 +45,9 @@ export class MapView extends MnView {
             popup: "#popup",
             content: "#popup-content",
             closer: "#popup-closer",
+            mInfo: ".markers-info",
+            info: ".info",
+
         };
     }
 
@@ -75,7 +84,7 @@ export class MapView extends MnView {
         this.activeLayer = "OSM";
         this.map = new Map({
             controls: defaultControls().extend([mousePositionControl]),
-            overlays: [overlay],
+            overlays: [overlay], //вот тут как???
             target: "main_view",
             layers: [
                 new TileLayer({
@@ -120,7 +129,6 @@ export class MapView extends MnView {
 
         this.map.addLayer(markerVectorLayer);
 
-
         this.map.on("click", e => {
             this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
                 console.log(`Координаты ${feature.getGeometry().getCoordinates()}`);
@@ -150,11 +158,6 @@ export class MapView extends MnView {
 
                     let name = model.get("name");
                     console.log(coords);
-                    //console.log(name);
-                    // setTimeout(() => {
-                    //     this.ui.content.html(`Это маркер: ${name}`);
-                    //     this.overlay.setPosition(coords);
-                    // }, 3000);
 
                     function flyTo(location, view, done) {
                         const duration = 2000;
@@ -168,9 +171,6 @@ export class MapView extends MnView {
                         } else {
                             zoom = zoom;
                         }
-                        // if ((location == view.getCenter()) && (maxZoom == view.getZoom())) {
-                        //     console.log('нельзя один и тот же маркер зумить ;<');
-                        // }
 
                         function callback(complete) {
                             --parts;
@@ -198,13 +198,16 @@ export class MapView extends MnView {
                             },
                             callback
                         );
-
                     }
 
                     setTimeout(() => {
                         flyTo(coords, view, () => {
+                            // this.overlay.setPosition(undefined);
+                            // this.ui.content.blur();
+                            ///вот это как починить? ///
                             this.ui.content.html(`Это маркер: ${name}`);
                             this.overlay.setPosition(coords);
+                            ////////////////////////////
                             console.log("done");
                         });
                     }, 500);

@@ -1,16 +1,15 @@
 import { View, CollectionView } from 'backbone.marionette';
 import * as _ from 'underscore';
-import $ from 'jquery';
 
 //import { SightsCollection } from '../models/sight.js';
 import markerList from '../../templates/list_view.hbs';
-import { MapView } from './map.js';
+
 
 import './marker_li.scss';
 
 class GasStationView extends View {
     template(data) {
-        return `<div>${data.name}</div>`;
+        return `<div class="sight">${data.name}</div>`;
     }
 
     modelEvents() {
@@ -58,6 +57,13 @@ class GasStationCollectionView extends CollectionView {
 }
 
 export class MarkerView extends View {
+    tagName() {
+        return 'div';
+    }
+
+    className() {
+        return 'all-markers';
+    }
 
     template() {
         return markerList();
@@ -75,12 +81,6 @@ export class MarkerView extends View {
     regions() {
         return {
             'qlist': '.sights-list',
-        }
-    }
-
-    initialize() {
-        function myMarkers(data) {
-            this.marker = data;
         }
     }
 
