@@ -4,8 +4,8 @@
     }
 }
 
-.selected>.sight {
-    background-color: rgb(209, 97, 46);
+.selected {
+    background-color: rgb(209, 97, 46) !important;
 }
 
 .info {
@@ -13,13 +13,17 @@
     max-height: 690px;
 }
 
+.full-info {
+    word-break: break-all;
+}
+
 .markers-info {
     z-index: 401;
-    min-height: 400px;
+    min-height: 50px;
     min-width: 200px;
     top: 100px;
     left: 30px;
-    max-width: 300px;
+    max-width: 200px;
     position: absolute;
     display: block;
     color: #2f3d44;

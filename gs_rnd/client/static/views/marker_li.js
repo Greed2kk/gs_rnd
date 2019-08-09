@@ -8,8 +8,12 @@ import markerList from '../../templates/list_view.hbs';
 import './marker_li.scss';
 
 class GasStationView extends View {
+    className() {
+        return 'sight';
+    }
+
     template(data) {
-        return `<div class="sight">${data.name}</div>`;
+        return `${data.name}`;
     }
 
     modelEvents() {
@@ -22,14 +26,6 @@ class GasStationView extends View {
         this.$el.toggleClass('selected', this.model.get('selected'));
     }
 
-    // events() {
-    //     return {
-    //         'click': 'onClick'
-    //     }
-    // }
-    // onClick() {
-    //     this.trigger('child:click', this);
-    // }
     triggers() {
         return {
             'click': 'child:click',
