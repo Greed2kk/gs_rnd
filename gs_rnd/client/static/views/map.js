@@ -136,6 +136,10 @@ export class MapView extends MnView {
                 this.ui.content.html(`Это маркер: ${feature.values_.name}`);
                 overlay.setPosition(coordinate);
 
+                // вызов
+
+
+
             });
         });
 
@@ -146,7 +150,7 @@ export class MapView extends MnView {
         const view = this.map.getView();
 
         const model = this.getOption("collection").on(
-            "change:selected",
+            "change:active",
             (model, value, options) => {
                 //console.log(model);
                 if (value) {

@@ -49,16 +49,16 @@ export class MarkerInfoView extends View {
     }
 
     onRender() {
-        this.showInfo();
+        this.initListeners();
         this.$el.toggleClass('hide', !this.model.get('active'));
     }
 
-    showInfo() {
+    initListeners() {
         const collection = this.getOption("collection");
         const model = collection.on(
-            "change:selected",
+            "change:active",
             (model, value, options) => {
-                const gasStation = collection.findWhere({ selected: true });
+                const gasStation = collection.findWhere({ active: true });
                 this.model.set('active', gasStation);
                 // if (value) {
                 //     this.model.set('active', model);

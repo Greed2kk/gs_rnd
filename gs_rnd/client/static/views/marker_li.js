@@ -8,8 +8,16 @@ import markerList from '../../templates/list_view.hbs';
 import './marker_li.scss';
 
 class GasStationView extends View {
+    tagName() {
+        return 'div';
+    }
+
     className() {
-        return 'sight';
+        return 'list-group-item list-group-item-action';
+    }
+
+    idAttribute() {
+        return 'marker_button';
     }
 
     template(data) {
@@ -23,7 +31,7 @@ class GasStationView extends View {
     }
 
     onRender() {
-        this.$el.toggleClass('selected', this.model.get('selected'));
+        this.$el.toggleClass('active', this.model.get('active'));
     }
 
     triggers() {
@@ -34,6 +42,13 @@ class GasStationView extends View {
 }
 
 class GasStationCollectionView extends CollectionView {
+    tagName() {
+        return 'div';
+    }
+
+    className() {
+        return 'list-group';
+    }
     childView() {
             return GasStationView;
         }
@@ -41,11 +56,11 @@ class GasStationCollectionView extends CollectionView {
     childViewEvents() {
         return {
             'child:click': view => {
-                const child = this.collection.find(model => model.get('selected'));
+                const child = this.collection.find(model => model.get('active'));
                 if (child) {
-                    child.set('selected', false);
+                    child.set('active', false);
                 }
-                view.model.set('selected', true);
+                view.model.set('active', true);
                 console.log('вы кликнули по', view.model.get('name'));
             }
         }

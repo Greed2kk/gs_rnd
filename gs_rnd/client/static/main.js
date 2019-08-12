@@ -38,13 +38,13 @@ export class MainView extends View {
                 geometry: [39.71230493509211, 47.23719566405421],
                 name: 'Default marker',
                 image: '/static/static/icons/default.png',
-                selected: false,
+                active: false,
             },
             {
                 geometry: [39.71280724683311, 47.24232550518022],
                 name: 'rosneft',
                 image: '/static/static/icons/gas_def.png',
-                selected: false,
+                active: false,
             }
         ]);
 
