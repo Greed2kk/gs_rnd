@@ -35,12 +35,14 @@ export class MainView extends View {
 
     onRender() {
         const gasStationCollection = new Backbone.Collection([{
+                id: 1,
                 geometry: [39.71230493509211, 47.23719566405421],
                 name: 'Default marker',
                 image: '/static/icons/default.png',
                 active: false,
             },
             {
+                id: 2,
                 geometry: [39.71280724683311, 47.24232550518022],
                 name: 'rosneft',
                 image: '/static/icons/gas_def.png',

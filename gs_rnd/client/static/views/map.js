@@ -40,6 +40,42 @@ export class MapView extends MnView {
         return map_view();
     }
 
+    triggers() {
+        return {
+            'keyup input.search-bar': 'data:entered'
+        }
+    }
+
+    modelEvents() {
+        return {
+            'change': 'render',
+        };
+    }
+
+    onRender() {
+        this.$el.toggleClass('active', this.model.get('active'));
+    }
+
+
+    onDataEntered(view, event) {
+        if (event.originalEvent.keyCode != 13) {
+            return
+        }
+        let searchKey = event.target.value;
+        if (searchKey.length == 0) {
+            this.sightsCollection.fetch();
+        } else {
+            this.sightsCollection.fetch({
+                url: '/api/sights/?title__icontains=' + searchKey +
+                    '&description__icontains=' + searchKey +
+                    '&hash_tag__icontains=' + searchKey,
+                data: {
+                    'title': searchKey
+                }
+            });
+        }
+    }
+
     ui() {
         return {
             popup: "#popup",
@@ -65,7 +101,7 @@ export class MapView extends MnView {
 
         this.ui.closer.on("click", () => {
             overlay.setPosition(undefined);
-            this.ui.closer.blur();
+            // this.ui.closer.blur(); / /////////////////////////////////////////////////////////////////////////////////////
             return false;
         });
 
@@ -98,9 +134,10 @@ export class MapView extends MnView {
         });
         const { collection } = this.options;
         const features = collection.map(item => {
-            const { geometry, name, image } = item.pick("geometry", "name", "image");
+            const { geometry, name, image, id } = item.pick("id", "geometry", "name", "image");
             const feature = new Feature({
                 name,
+                id,
                 geometry: new Point(fromLonLat(geometry))
             });
             feature.setStyle(
@@ -136,10 +173,17 @@ export class MapView extends MnView {
                 this.ui.content.html(`Это маркер: ${feature.values_.name}`);
                 overlay.setPosition(coordinate);
 
+                let model = collection.findWhere({ id: feature.values_.id });
+                //     model.set('active', true);
+                const child = collection.find(model => model.get('active'));
+                if (child) {
+                    child.set('active', false);
+                }
+                model.set('active', true);
+                // if (feature.values_.id == view.model.get('id')
+                //this.model.set('active', gasStation);
                 // вызов
-
-
-
+                // this.initListeners.flyTo(coordinate, view);
             });
         });
 
@@ -203,6 +247,8 @@ export class MapView extends MnView {
                             callback
                         );
                     }
+
+                    //this.initListeners.flyTo = flyTo;
 
                     setTimeout(() => {
                         flyTo(coords, view, () => {
