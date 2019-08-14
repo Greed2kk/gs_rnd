@@ -40,42 +40,6 @@ export class MapView extends MnView {
         return map_view();
     }
 
-    triggers() {
-        return {
-            'keyup input.search-bar': 'data:entered'
-        }
-    }
-
-    modelEvents() {
-        return {
-            'change': 'render',
-        };
-    }
-
-    onRender() {
-        this.$el.toggleClass('active', this.model.get('active'));
-    }
-
-
-    onDataEntered(view, event) {
-        if (event.originalEvent.keyCode != 13) {
-            return
-        }
-        let searchKey = event.target.value;
-        if (searchKey.length == 0) {
-            this.sightsCollection.fetch();
-        } else {
-            this.sightsCollection.fetch({
-                url: '/api/sights/?title__icontains=' + searchKey +
-                    '&description__icontains=' + searchKey +
-                    '&hash_tag__icontains=' + searchKey,
-                data: {
-                    'title': searchKey
-                }
-            });
-        }
-    }
-
     ui() {
         return {
             popup: "#popup",
