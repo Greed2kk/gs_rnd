@@ -2,7 +2,7 @@
 html,
 body {
     height: 100%;
-    weight: 100%;
+    width: 100%;
 }
 
 #main_view {
@@ -103,19 +103,18 @@ body {
     border-radius: 8px;
 }
 
-.input-group {
-    z-index: 2;
+.search {
+    z-index: 402;
     display: block;
     max-width: 200px;
     height: 2.375rem;
     line-height: 2.375rem;
     text-align: center;
-    pointer-events: none;
     color: #aaa;
     margin-bottom: 20px;
 }
 
-.list-group-item {
+.list-info-gs {
     margin-bottom: 5px;
     cursor: pointer;
 }

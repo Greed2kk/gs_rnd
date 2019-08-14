@@ -8,17 +8,18 @@ import markerList from '../../templates/list_view.hbs';
 import './marker_li.scss';
 
 class GasStationView extends View {
+    // id() {
+    //     return 'marker_button';
+    // }
+
     tagName() {
         return 'div';
     }
 
     className() {
-        return 'list-group-item list-group-item-action';
+        return 'list-group-item list-group-item-action list-info-gs';
     }
 
-    idAttribute() {
-        return 'marker_button';
-    }
 
     template(data) {
         return `${data.name}`;
