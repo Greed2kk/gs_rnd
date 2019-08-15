@@ -155,10 +155,10 @@ export class MapView extends MnView {
                 }
                 model.set('active', true);
 
-                setTimeout(() => {
-                    this.ui.mapC.on('click', this.onCloserClick);
-                }, 1000);
-                this.ui.closer.on('click', this.onCloserClick);
+                // setTimeout(() => {
+                //     this.ui.mapC.on('click', this.onCloserClick);
+                // }, 1000);
+                this.ui.closer.one('click', this.onCloserClick);
                 // if (feature.values_.id == view.model.get('id')
                 //this.model.set('active', gasStation);
                 // вызов
@@ -185,6 +185,14 @@ export class MapView extends MnView {
             (model, value, options) => {
                 //console.log(model);
                 if (value) {
+
+                    setTimeout(() => {
+                        this.ui.mapC.one('click', () => {
+                            model.set('active', false);
+                            this.overlay.setPosition(undefined);
+                        });
+                    });
+
                     function show() {
                         const coords = model.get("geometry");
                         return fromLonLat(coords);
