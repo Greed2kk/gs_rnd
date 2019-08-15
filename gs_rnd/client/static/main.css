@@ -1,22 +1,39 @@
 @import url('~bootstrap/dist/css/bootstrap.css');
 html,
-body {
-    height: 100%;
-    width: 100%;
-}
 
-#main_view {
+/* body {
     height: 100%;
     width: 100%;
-}
+} */
 
 #app {
     height: 100%;
     width: 100%;
 }
 
+.main_view {
+    height: 100%;
+    width: 100%;
+}
+
+.map-view-container {
+    height: 100%;
+    width: 100%;
+}
+
+.map-view {
+    height: 100%;
+    width: 100%;
+}
+
+.map-container {
+    height: 100%;
+    width: 100%;
+}
+
 .custom-mouse-position {
-    background-color: rgba(0, 60, 136, .4);
+    opacity: 0.9;
+    background-color: #337ab7;
     border-radius: 4px;
     color: #eee;
     padding: 1px 5px;

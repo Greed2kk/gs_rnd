@@ -22,18 +22,20 @@ import Feature from "ol/Feature.js";
 import { Icon, Style } from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import { Vector as VectorLayer } from "ol/layer.js";
-
+import _ from 'underscore';
+import $ from 'jquery';
 
 import map_view from "../../templates/map_view.hbs";
 //import popup_view from '../../templates/popup_view.hbs';
 
 export class MapView extends MnView {
+
     tagName() {
         return 'div';
     }
 
     className() {
-        return 'map-container';
+        return 'map-view';
     }
 
     template() {
@@ -46,12 +48,24 @@ export class MapView extends MnView {
             content: "#popup-content",
             closer: "#popup-closer",
             mInfo: ".markers-info",
-            info: ".info",
-
+            info: ".markers-info",
+            mapC: "#map-container",
         };
     }
 
+    initialize() {
+        _.bindAll(this, 'onCloserClick');
+
+    }
+
+
+    onCloserClick() {
+        this.overlay.setPosition(undefined);
+    }
+
     onAttach() {
+        window.view = this;
+
         let overlay = new Overlay({
             element: this.ui.popup[0],
             autoPan: false,
@@ -62,12 +76,6 @@ export class MapView extends MnView {
         });
         this.overlay = overlay;
         overlay.setOffset([0, -20]);
-
-        this.ui.closer.on("click", () => {
-            overlay.setPosition(undefined);
-            // this.ui.closer.blur(); / /////////////////////////////////////////////////////////////////////////////////////
-            return false;
-        });
 
         function customLatLng(coord) {
             const [lat, lng] = coord;
@@ -84,8 +92,8 @@ export class MapView extends MnView {
         this.activeLayer = "OSM";
         this.map = new Map({
             controls: defaultControls().extend([mousePositionControl]),
-            overlays: [overlay], //вот тут как???
-            target: "main_view",
+            overlays: [overlay],
+            target: "map-container",
             layers: [
                 new TileLayer({
                     source: new OSM()
@@ -148,15 +156,28 @@ export class MapView extends MnView {
                 //this.model.set('active', gasStation);
                 // вызов
                 // this.initListeners.flyTo(coordinate, view);
+
+                this.ui.popup.on('click', this.onCloserClick);
+
+
             });
         });
-
         this.initListeners();
+
+        setTimeout(() => {
+            this.ui.mapC.on('click', this.onCloserClick);
+        }, 1000);
+
+        this.ui.closer.on('click', this.onCloserClick);
+    }
+
+    onBeforeDestroy() {
+        this.ui.closer.off('click', onCloserClick);
+        this.ui.mapC.off('click', onCloserClick);
     }
 
     initListeners() {
         const view = this.map.getView();
-
         const model = this.getOption("collection").on(
             "change:active",
             (model, value, options) => {
@@ -211,8 +232,6 @@ export class MapView extends MnView {
                             callback
                         );
                     }
-
-                    //this.initListeners.flyTo = flyTo;
 
                     setTimeout(() => {
                         flyTo(coords, view, () => {
