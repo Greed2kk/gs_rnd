@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ASSET_PATH = process.env.ASSET_PATH || '/';
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -17,7 +18,10 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             jQuery: "jquery"
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'static/icons', to: 'icons' }
+        ])
     ],
     module: {
         rules: [{
