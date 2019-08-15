@@ -55,15 +55,17 @@ export class MapView extends MnView {
 
     initialize() {
         _.bindAll(this, 'onCloserClick');
-
     }
-
 
     onCloserClick() {
         this.overlay.setPosition(undefined);
+        const collection = this.getOption("collection");
+        let model = collection.findWhere({ active: true });
+        model.set('active', false);
     }
 
     onAttach() {
+
         window.view = this;
 
         let overlay = new Overlay({
@@ -152,23 +154,22 @@ export class MapView extends MnView {
                     child.set('active', false);
                 }
                 model.set('active', true);
+
+                setTimeout(() => {
+                    this.ui.mapC.on('click', this.onCloserClick);
+                }, 1000);
+                this.ui.closer.on('click', this.onCloserClick);
                 // if (feature.values_.id == view.model.get('id')
                 //this.model.set('active', gasStation);
                 // вызов
                 // this.initListeners.flyTo(coordinate, view);
 
-                this.ui.popup.on('click', this.onCloserClick);
-
-
             });
         });
         this.initListeners();
 
-        setTimeout(() => {
-            this.ui.mapC.on('click', this.onCloserClick);
-        }, 1000);
 
-        this.ui.closer.on('click', this.onCloserClick);
+
     }
 
     onBeforeDestroy() {
@@ -177,6 +178,7 @@ export class MapView extends MnView {
     }
 
     initListeners() {
+
         const view = this.map.getView();
         const model = this.getOption("collection").on(
             "change:active",
