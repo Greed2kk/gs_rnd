@@ -1,20 +1,11 @@
 import { View, CollectionView } from 'backbone.marionette';
 import * as _ from 'underscore';
 
-//import { SightsCollection } from '../models/sight.js';
 import markerList from '../../templates/list_view.hbs';
-
 
 import './marker_li.scss';
 
 class GasStationView extends View {
-    // id() {
-    //     return 'marker_button';
-    // }
-
-    tagName() {
-        return 'div';
-    }
 
     className() {
         return 'list-group-item list-group-item-action list-info-gs';
@@ -43,17 +34,14 @@ class GasStationView extends View {
 }
 
 class GasStationCollectionView extends CollectionView {
-    tagName() {
-        return 'div';
-    }
 
     className() {
         return 'list-group';
     }
     childView() {
-            return GasStationView;
-        }
-        // childViewTriggers
+        return GasStationView;
+    }
+
     childViewEvents() {
         return {
             'child:click': view => {
@@ -61,8 +49,7 @@ class GasStationCollectionView extends CollectionView {
                 if (child) {
                     child.set('active', false);
                 }
-                view.model.set('active', true);
-                console.log('вы кликнули по', view.model.get('name'));
+                view.model.set('active', true, {animate: true});
             }
         }
     }
@@ -100,9 +87,5 @@ export class MarkerView extends View {
         this.showChildView('qlist', new GasStationCollectionView({
             collection: this.getOption('collection'),
         }));
-
-        // markers_info.forEach(function(marker) {
-        //     (new MyView(marker)).render()
-        // });
     }
 }

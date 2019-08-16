@@ -1,14 +1,9 @@
 import { View } from 'backbone.marionette';
-//import { Events } from 'backbone';
-//import { SightsCollection } from '../models/sight.js';
 import marker_info from '../../templates/marker_info.hbs';
 import './marker_li.scss';
 
 
 export class MarkerInfoView extends View {
-    tagName() {
-        return 'div';
-    }
 
     className() {
         return 'markers-info';
@@ -55,24 +50,15 @@ export class MarkerInfoView extends View {
 
     initListeners() {
         const collection = this.getOption("collection");
-        const model = collection.on(
-            "change:active",
-            (model, value, options) => {
-                const gasStation = collection.findWhere({ active: true });
-                this.model.set('active', gasStation);
-                // if (value) {
-                //     this.model.set('active', model);
-                // const coords = model.get("geometry");
-                // const name = model.get("name");
-                // const image = model.get("image");
-                // //let z = this.$el.find('.title-info');
-                // //console.log(z);
-                // let title = document.querySelector('.title-info');
-                // title.innerHTML = name;
-                // let coord = document.querySelector('.full-info');
-                // coord.innerHTML = `Координаты: <br> Lon: ${coords[0].toFixed(4)} <br> Lat: ${coords[1].toFixed(4)}`;
-                // }
-            });
+        this.listenTo(collection, {
+            'ready': (model) => {
+                this.model.set('active', model);
+            },
+            'change:active': (model, value) => {
+                if (!value) {
+                    this.model.unset('active');
+                }
+            }
+        });
     }
-
 };
