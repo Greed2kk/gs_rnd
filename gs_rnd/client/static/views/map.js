@@ -2,19 +2,11 @@ import "ol/ol.css";
 import { View as MnView } from "backbone.marionette";
 import { Map, View } from "ol";
 import OSM from "ol/source/OSM";
-import * as proj from "ol/proj";
 import TileLayer from "ol/layer/Tile";
 import { fromLonLat } from "ol/proj";
-import XYZ from "ol/source/XYZ";
-import { toLonLat } from "ol/proj.js";
 import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
-import { click } from "ol/events/condition.js";
-import Select from "ol/interaction/Select.js";
 import Overlay from "ol/Overlay.js";
-
-import Zoom from "ol/control/Zoom";
-import { easeIn, easeOut } from "ol/easing.js";
 
 //для маркера
 import Point from "ol/geom/Point.js";
@@ -23,16 +15,11 @@ import { Icon, Style } from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import _ from 'underscore';
-import $ from 'jquery';
+import { flyTo } from '../utils';
 
 import map_view from "../../templates/map_view.hbs";
-//import popup_view from '../../templates/popup_view.hbs';
 
 export class MapView extends MnView {
-
-    tagName() {
-        return 'div';
-    }
 
     className() {
         return 'map-view';
@@ -55,19 +42,10 @@ export class MapView extends MnView {
 
     initialize() {
         _.bindAll(this, 'onCloserClick');
-    }
-
-    onCloserClick() {
-        this.overlay.setPosition(undefined);
-        const collection = this.getOption("collection");
-        let model = collection.findWhere({ active: true });
-        model.set('active', false);
+        this._isFlying = false;
     }
 
     onAttach() {
-
-        window.view = this;
-
         let overlay = new Overlay({
             element: this.ui.popup[0],
             autoPan: false,
@@ -132,130 +110,84 @@ export class MapView extends MnView {
         let vectorSource = new VectorSource({
             features
         });
-        //console.log(vectorSource);
 
         let markerVectorLayer = new VectorLayer({
-            source: vectorSource
+            source: vectorSource,
+            name: 'markers'
         });
 
         this.map.addLayer(markerVectorLayer);
 
         this.map.on("click", e => {
-            this.map.forEachFeatureAtPixel(e.pixel, (feature, layer) => {
-                console.log(`Координаты ${feature.getGeometry().getCoordinates()}`);
-                const coordinate = feature.getGeometry().getCoordinates();
-                this.ui.content.html(`Это маркер: ${feature.values_.name}`);
-                overlay.setPosition(coordinate);
-
-                let model = collection.findWhere({ id: feature.values_.id });
-                //     model.set('active', true);
+            this.map.forEachFeatureAtPixel(e.pixel, (feature) => {
+                const { id } = feature.getProperties();
+                let model = collection.get(id);
                 const child = collection.find(model => model.get('active'));
                 if (child) {
                     child.set('active', false);
                 }
                 model.set('active', true);
-
-                // setTimeout(() => {
-                //     this.ui.mapC.on('click', this.onCloserClick);
-                // }, 1000);
-                this.ui.closer.one('click', this.onCloserClick);
-                // if (feature.values_.id == view.model.get('id')
-                //this.model.set('active', gasStation);
-                // вызов
-                // this.initListeners.flyTo(coordinate, view);
-
             });
         });
+
         this.initListeners();
-
-
-
     }
 
     onBeforeDestroy() {
-        this.ui.closer.off('click', onCloserClick);
-        this.ui.mapC.off('click', onCloserClick);
+        this.ui.closer.off('click', this.onCloserClick);
+    }
+
+    onCloserClick() {
+        this.overlay.setPosition(undefined);
+        const collection = this.getOption("collection");
+        let model = collection.findWhere({ active: true });
+        if (model) {
+            model.set('active', false);
+        }
+    }
+
+    findFeatureByModel(model) {
+        const layers = this.map.getLayers().getArray();
+        const layer = layers.find(layer => layer.getProperties().name === 'markers');
+        return layer.getSource().getFeatures().find(feature => feature.getProperties().id === model.get('id'));
+    }
+
+    showOverlay(model) {
+        const feature = this.findFeatureByModel(model);
+        const coordinate = feature.getGeometry().getCoordinates();
+        this.ui.content.html(`Это маркер: ${feature.getProperties().name}`);
+        this.overlay.setPosition(coordinate);
     }
 
     initListeners() {
-
-        const view = this.map.getView();
-        const model = this.getOption("collection").on(
-            "change:active",
-            (model, value, options) => {
-                //console.log(model);
+        const collection = this.getOption("collection");
+        this.listenTo(collection, {
+            'change:active': (model, value, options) => {
                 if (value) {
-
-                    setTimeout(() => {
-                        this.ui.mapC.one('click', () => {
-                            model.set('active', false);
-                            this.overlay.setPosition(undefined);
-                        });
-                    });
-
-                    function show() {
-                        const coords = model.get("geometry");
-                        return fromLonLat(coords);
-                    }
-                    const coords = show();
-
-                    let name = model.get("name");
-                    console.log(coords);
-
-                    function flyTo(location, view, done) {
-                        const duration = 2000;
-                        let zoom = view.getZoom();
-                        let parts = 2;
-                        let called = false;
-                        const maxZoom = 19;
-                        const minZoom = 15
-                        if (zoom >= minZoom) {
-                            zoom = minZoom;
-                        } else {
-                            zoom = zoom;
+                    const feature = this.findFeatureByModel(model);
+                    const coordinate = feature.getGeometry().getCoordinates();
+                    if (options.animate) {
+                        if (!this._isFlying) {
+                            this._isFlying = true;
+                            flyTo(coordinate, this.map.getView(), () => {
+                                model.trigger('ready', model);
+                                this._isFlying = false;
+                            });
                         }
-
-                        function callback(complete) {
-                            --parts;
-                            if (called) {
-                                return;
-                            }
-                            if (parts === 0 || !complete) {
-                                called = true;
-                                done(complete);
-                            }
-                        }
-
-                        view.animate({
-                                center: location,
-                                duration: duration
-                            },
-                            callback
-                        );
-                        view.animate({
-                                zoom: zoom,
-                                duration: duration / 2
-                            }, {
-                                zoom: maxZoom,
-                                duration: duration / 2
-                            },
-                            callback
-                        );
+                    } else {
+                        model.trigger('ready', model);
                     }
-
-                    setTimeout(() => {
-                        flyTo(coords, view, () => {
-                            // this.overlay.setPosition(undefined);
-                            // this.ui.content.blur();
-                            ///вот это как починить? ///
-                            this.ui.content.html(`Это маркер: ${name}`);
-                            this.overlay.setPosition(coords);
-                            ////////////////////////////
-                            console.log("done");
-                        });
-                    }, 500);
-
+                } else {
+                    this.onCloserClick();
+                    this.map.un('click', this.onCloserClick);
                 }
-            });
+            },
+            'ready': (model) => {
+                this.map.on('click', this.onCloserClick);
+                this.showOverlay(model);
+            }
+        });
+
+        this.ui.closer.on('click', this.onCloserClick);
     }
 }
