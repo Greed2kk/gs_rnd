@@ -10,10 +10,9 @@ pylint = "*"
 django = "*"
 djangorestframework = "*"
 psycopg2 = "*"
-djangorestframework-gis = "*"
 django-rest-auth = "*"
-postgis = "*"
-geodjango = "*"
+pillow = "*"
+flake8-docstrings = "*"
 
 [requires]
 python_version = "3.7"

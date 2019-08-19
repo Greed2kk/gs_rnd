@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 with open('etc/secret_key.txt') as f:
-    SECRET_KEY = f.read().strip()
+    SECRET_KEY = f.read().strip() or 'UrSecretKey'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gs_rnd',
         'USER': 'postgres',
-        'PASSWORD': DB_PASS,
+        'PASSWORD': DB_PASS or 'UrPassword',
     }
 }
 
