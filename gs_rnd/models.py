@@ -8,6 +8,6 @@ class Image(models.Model):
 class GasStation(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название',)
     coordinates = models.PointField(verbose_name='Координаты',)
-    marker_image = models.ForeignKey(Image, on_delete=models.PROTECT, verbose_name='Маркер',)
+    marker = models.ForeignKey(Image, on_delete=models.PROTECT, verbose_name='Маркер', related_name='marker')
     address = models.CharField(max_length=100, verbose_name='Адрес')
-    logo = models.ForeignKey(Image, on_delete=models.PROTECT, verbose_name='Лого',)
+    logo = models.ForeignKey(Image, on_delete=models.PROTECT, verbose_name='Лого', related_name='logo')
