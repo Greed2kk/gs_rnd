@@ -1,3 +1,7 @@
-__pycache__
-.idea
-.venv
+__pycache__/
+.idea/
+.vscode/
+etc/
+gs_rnd/client/dist/
+gs_rnd/client/node_modules/
+

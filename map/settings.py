@@ -20,7 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's_!!66byv8__$ry7a%fnc2yh#@ns()_cx#!45cn^oshofpssg@'
+with open('etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip() or 'UrSecretKey'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,13 +76,16 @@ WSGI_APPLICATION = 'map.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+with open('etc/db_pass.txt') as p:
+    DB_PASS = p.read().strip()
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gs_rnd',
         'USER': 'postgres',
-        'PASSWORD': 'qwerty12+',
+        'PASSWORD': DB_PASS or 'UrPassword',
     }
 }
 
