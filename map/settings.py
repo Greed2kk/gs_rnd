@@ -26,7 +26,7 @@ with open('etc/secret_key.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -73,6 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'map.wsgi.application'
 
+# using url filter by default. Need install from pypi. called "django-url-filter"
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['url_filter.integrations.drf.DjangoFilterBackend']
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

@@ -6,13 +6,11 @@ class ImageSerializer(ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'image')
-        ordering = ('id',)
+        fields = '__all__'
 
 
 class GasStationSerializer(ModelSerializer):
 
     class Meta:
         model = GasStation
-        fields = ('id', 'title', 'coordinates', 'marker', 'address', 'logo')
-        ordering = ('id',)
+        fields = '__all__'
