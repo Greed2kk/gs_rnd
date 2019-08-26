@@ -7,6 +7,7 @@ import { fromLonLat } from "ol/proj";
 import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
 import Overlay from "ol/Overlay.js";
+import WKT from 'ol/format/WKT.js';
 
 //для маркера
 import Point from "ol/geom/Point.js";
@@ -84,13 +85,20 @@ export class MapView extends MnView {
                 zoom: 14
             })
         });
-        const { collection } = this.options;
-        const features = collection.map(item => {
-            const { geometry, name, image, id } = item.pick("id", "geometry", "name", "image");
+        const wkt = new WKT();
+        const { gasStationCollection, imageCollection } = this.options;
+        const features = gasStationCollection.map(item => {
+            const { coordinates, title, marker, id } = item.pick("id", "coordinates", "title", "marker");
+            const path = imageCollection.get(marker).get('image_path');
+            const [, geom] = coordinates.split(';');
             const feature = new Feature({
-                name,
+                name: title,
                 id,
-                geometry: new Point(fromLonLat(geometry))
+                geometry: new Point(fromLonLat(wkt
+                    .readFeature(geom)
+                    .getGeometry()
+                    .getCoordinates()
+                )),
             });
             feature.setStyle(
                 new Style({
@@ -98,7 +106,7 @@ export class MapView extends MnView {
                         anchor: [0.5, 46],
                         anchorXUnits: "fraction",
                         anchorYUnits: "pixels",
-                        src: image,
+                        src: path,
                         size: [64, 64],
                         scale: 0.5
                     })

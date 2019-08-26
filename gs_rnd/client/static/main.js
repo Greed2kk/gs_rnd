@@ -34,31 +34,30 @@ export class MainView extends View {
     }
 
     onRender() {
-        const gasStationCollection = new Backbone.Collection([{
-                id: 1,
-                geometry: [39.71230493509211, 47.23719566405421],
-                name: 'Default marker',
-                image: '/static/icons/default.png',
-                active: false,
-            },
-            {
-                id: 2,
-                geometry: [39.71280724683311, 47.24232550518022],
-                name: 'rosneft',
-                image: '/static/icons/gas_def.png',
-                active: false,
-            }
-        ]);
+        const GasStationCollection = Backbone.Collection.extend({
+            url: '/api/gas_stations'
+        });
+        const ImageCollection = Backbone.Collection.extend({
+            url: '/api/images'
+        });
 
-        this.showChildView('info', new MarkerInfoView({
-            collection: gasStationCollection,
-        }));
+        const gasStationCollection = new GasStationCollection();
+        const imageCollection = new ImageCollection();
 
-        this.showChildView('list', new MarkerView({
-            collection: gasStationCollection,
-        }));
-        this.showChildView('map', new MapView({
-            collection: gasStationCollection,
-        }));
+        Promise.all([
+            gasStationCollection.fetch(),
+            imageCollection.fetch()
+        ]).then(() => {
+            this.showChildView('info', new MarkerInfoView({
+                collection: gasStationCollection,
+            }));
+            this.showChildView('list', new MarkerView({
+                collection: gasStationCollection,
+            }));
+            this.showChildView('map', new MapView({
+                gasStationCollection,
+                imageCollection
+            }));
+        });
     }
 };
