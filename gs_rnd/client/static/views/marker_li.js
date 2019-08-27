@@ -13,7 +13,7 @@ class GasStationView extends View {
 
 
     template(data) {
-        return `${data.name}`;
+        return `${data.title}`;
     }
 
     modelEvents() {
@@ -49,7 +49,7 @@ class GasStationCollectionView extends CollectionView {
                 if (child) {
                     child.set('active', false);
                 }
-                view.model.set('active', true, {animate: true});
+                view.model.set('active', true, { animate: true });
             }
         }
     }

@@ -1,7 +1,7 @@
 import { View } from 'backbone.marionette';
 import marker_info from '../../templates/marker_info.hbs';
 import './marker_li.scss';
-
+import { wkt } from '../utils';
 
 export class MarkerInfoView extends View {
 
@@ -13,7 +13,7 @@ export class MarkerInfoView extends View {
         const model = data.active;
         if (model) {
             data = model.toJSON();
-            const coords = data.geometry;
+            let coords = wkt(data.coordinates);
             data.geometry = `Координаты: <br> Lon: ${coords[0].toFixed(4)} <br> Lat: ${coords[1].toFixed(4)}`;
         }
         return marker_info(data);
