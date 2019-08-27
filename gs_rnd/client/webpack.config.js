@@ -20,7 +20,7 @@ module.exports = {
             jQuery: "jquery"
         }),
         new CopyWebpackPlugin([
-            { from: 'static/icons', to: 'icons' }
+            { from: '../../images', to: 'images' }
         ])
     ],
     module: {
