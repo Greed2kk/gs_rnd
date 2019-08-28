@@ -7,7 +7,7 @@ import { fromLonLat } from "ol/proj";
 import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
 import Overlay from "ol/Overlay.js";
-import WKT from 'ol/format/WKT.js';
+
 
 //для маркера
 import Point from "ol/geom/Point.js";
@@ -16,8 +16,7 @@ import { Icon, Style } from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import { Vector as VectorLayer } from "ol/layer.js";
 import _ from 'underscore';
-import { flyTo } from '../utils';
-
+import { flyTo, wkt } from '../utils';
 import map_view from "../../templates/map_view.hbs";
 
 export class MapView extends MnView {
@@ -85,20 +84,16 @@ export class MapView extends MnView {
                 zoom: 14
             })
         });
-        const wkt = new WKT();
         const { gasStationCollection, imageCollection } = this.options;
         const features = gasStationCollection.map(item => {
             const { coordinates, title, marker, id } = item.pick("id", "coordinates", "title", "marker");
             const path = imageCollection.get(marker).get('image_path');
-            const [, geom] = coordinates.split(';');
+            let coords = wkt(coordinates);
+            const revcords = coords.reverse()
             const feature = new Feature({
-                name: title,
+                title,
                 id,
-                geometry: new Point(fromLonLat(wkt
-                    .readFeature(geom)
-                    .getGeometry()
-                    .getCoordinates()
-                )),
+                geometry: new Point(fromLonLat(coords)),
             });
             feature.setStyle(
                 new Style({
@@ -129,8 +124,8 @@ export class MapView extends MnView {
         this.map.on("click", e => {
             this.map.forEachFeatureAtPixel(e.pixel, (feature) => {
                 const { id } = feature.getProperties();
-                let model = collection.get(id);
-                const child = collection.find(model => model.get('active'));
+                let model = gasStationCollection.get(id);
+                const child = gasStationCollection.find(model => model.get('active'));
                 if (child) {
                     child.set('active', false);
                 }
@@ -147,7 +142,7 @@ export class MapView extends MnView {
 
     onCloserClick() {
         this.overlay.setPosition(undefined);
-        const collection = this.getOption("collection");
+        const collection = this.getOption("gasStationCollection");
         let model = collection.findWhere({ active: true });
         if (model) {
             model.set('active', false);
@@ -163,12 +158,12 @@ export class MapView extends MnView {
     showOverlay(model) {
         const feature = this.findFeatureByModel(model);
         const coordinate = feature.getGeometry().getCoordinates();
-        this.ui.content.html(`Это маркер: ${feature.getProperties().name}`);
+        this.ui.content.html(`Это маркер: ${feature.getProperties().title}`);
         this.overlay.setPosition(coordinate);
     }
 
     initListeners() {
-        const collection = this.getOption("collection");
+        const collection = this.getOption("gasStationCollection");
         this.listenTo(collection, {
             'change:active': (model, value, options) => {
                 if (value) {

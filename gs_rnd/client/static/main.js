@@ -56,7 +56,8 @@ export class MainView extends View {
             }));
             this.showChildView('map', new MapView({
                 gasStationCollection,
-                imageCollection
+                imageCollection,
+
             }));
         });
     }

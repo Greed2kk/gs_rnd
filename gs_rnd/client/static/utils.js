@@ -1,3 +1,5 @@
+import WKT from 'ol/format/WKT.js';
+
 export function flyTo(location, view, done) {
     const duration = 2000;
     let zoom = view.getZoom();
@@ -37,4 +39,16 @@ export function flyTo(location, view, done) {
         },
         callback
     );
+}
+
+export function wkt(coordinates) {
+    const wkt = new WKT();
+    let [, geom] = coordinates.split(';');
+    let coords = (wkt
+        .readFeature(geom)
+        .getGeometry()
+        .getCoordinates()
+    );
+
+    return coords
 }
