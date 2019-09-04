@@ -49,7 +49,7 @@ export class MapView extends MnView {
                 if (activeModel) {
                     this.showOverlay(activeModel);
                 } else {
-                    this.clearPopups();
+                    this.onCloserClick();
                 }
             },
         };
@@ -185,11 +185,11 @@ export class MapView extends MnView {
     clearVector() {
         this.vectorSource && this.vectorSource.clear();
     }
-
+  
     clearPopups() {
         this.overlay.setPosition(undefined);
     }
-
+  
     clearInfo() {
         this.$el.toggleClass('hide');
     }
