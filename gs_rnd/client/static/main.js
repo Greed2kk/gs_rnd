@@ -1,12 +1,13 @@
 import { View } from 'backbone.marionette';
 import * as _ from 'underscore';
 import 'bootstrap';
+import { Collection } from 'backbone';
 
 import { App } from './apps/app.js';
 import { MapView } from './views/map.js';
 import { MarkerView } from './views/marker_li.js';
 import { MarkerInfoView } from './views/marker_info.js';
-
+import { GasStation } from './models/gas_station.js';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './main.css';
@@ -34,20 +35,29 @@ export class MainView extends View {
     }
 
     onRender() {
-        const GasStationCollection = Backbone.Collection.extend({
-            url: '/api/gas_stations'
-        });
-        const ImageCollection = Backbone.Collection.extend({
-            url: '/api/images'
-        });
+        class GasStationList extends Collection {
 
-        const gasStationCollection = new GasStationCollection();
-        const imageCollection = new ImageCollection();
+            url() {
+                return '/api/gas_stations';
+            }
 
-        Promise.all([
-            gasStationCollection.fetch(),
-            imageCollection.fetch()
-        ]).then(() => {
+            get model() {
+                return GasStation;
+            }
+        }
+
+        class ImageList extends Collection {
+
+            url() {
+                return '/api/images/';
+            }
+        }
+
+        const gasStationCollection = new GasStationList();
+        const imageCollection = new ImageList();
+        imageCollection.fetch().then(() => {
+
+            gasStationCollection.fetch();
             this.showChildView('info', new MarkerInfoView({
                 collection: gasStationCollection,
             }));
@@ -57,8 +67,7 @@ export class MainView extends View {
             this.showChildView('map', new MapView({
                 gasStationCollection,
                 imageCollection,
-
             }));
         });
     }
-};
+}
