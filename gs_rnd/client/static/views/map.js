@@ -24,7 +24,11 @@ export class MapView extends MnView {
         return 'map-view';
     }
 
-    template() {
+    template(data) {
+        const model = data.active;
+        if (model) {
+            data = model.toJSON();
+        }
         return map_view();
     }
 
@@ -181,7 +185,11 @@ export class MapView extends MnView {
     clearVector() {
         this.vectorSource && this.vectorSource.clear();
     }
-
+  
+    clearPopups() {
+        this.overlay.setPosition(undefined);
+    }
+  
     clearInfo() {
         this.$el.toggleClass('hide');
     }
