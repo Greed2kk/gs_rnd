@@ -220,6 +220,7 @@ export class MapView extends MnView {
             'ready': (model) => {
                 this.map.on('click', this.onCloserClick);
                 this.model.set('active', model);
+                this.showOverlay(model);
             },
             'update': (collection) => {
                 const model = this.model.get('active');
