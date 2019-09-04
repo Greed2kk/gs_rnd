@@ -7,8 +7,6 @@ import { fromLonLat } from "ol/proj";
 import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
 import Overlay from "ol/Overlay.js";
-
-
 //для маркера
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
@@ -18,6 +16,7 @@ import { Vector as VectorLayer } from "ol/layer.js";
 import _ from 'underscore';
 import { flyTo, wkt } from '../utils';
 import map_view from "../../templates/map_view.hbs";
+
 
 export class MapView extends MnView {
 
@@ -40,9 +39,22 @@ export class MapView extends MnView {
         };
     }
 
+    modelEvents() {
+        return {
+            'change:active': (model, activeModel) => {
+                if (activeModel) {
+                    this.showOverlay(activeModel);
+                } else {
+                    this.onCloserClick();
+                }
+            },
+        };
+    }
+
     initialize() {
         _.bindAll(this, 'onCloserClick');
         this._isFlying = false;
+        this.model = new Backbone.Model();
     }
 
     onAttach() {
@@ -54,6 +66,7 @@ export class MapView extends MnView {
                 duration: 250
             }
         });
+
         this.overlay = overlay;
         overlay.setOffset([0, -20]);
 
@@ -84,43 +97,18 @@ export class MapView extends MnView {
                 zoom: 14
             })
         });
-        const { gasStationCollection, imageCollection } = this.options;
-        const features = gasStationCollection.map(item => {
-            const { coordinates, title, marker, id } = item.pick("id", "coordinates", "title", "marker");
-            const path = imageCollection.get(marker).get('image_path');
-            let coords = wkt(coordinates);
-            const revcords = coords.reverse()
-            const feature = new Feature({
-                title,
-                id,
-                geometry: new Point(fromLonLat(coords)),
-            });
-            feature.setStyle(
-                new Style({
-                    image: new Icon({
-                        anchor: [0.5, 46],
-                        anchorXUnits: "fraction",
-                        anchorYUnits: "pixels",
-                        src: path,
-                        size: [64, 64],
-                        scale: 0.5
-                    })
-                })
-            );
-            return feature;
-        });
 
-        let vectorSource = new VectorSource({
-            features
+        this.vectorSource = new VectorSource({
+            features: [],
         });
 
         let markerVectorLayer = new VectorLayer({
-            source: vectorSource,
+            source: this.vectorSource,
             name: 'markers'
         });
-
         this.map.addLayer(markerVectorLayer);
 
+        const { gasStationCollection } = this.options; //вот это дублирование кода
         this.map.on("click", e => {
             this.map.forEachFeatureAtPixel(e.pixel, (feature) => {
                 const { id } = feature.getProperties();
@@ -132,7 +120,6 @@ export class MapView extends MnView {
                 model.set('active', true);
             });
         });
-
         this.initListeners();
     }
 
@@ -162,6 +149,43 @@ export class MapView extends MnView {
         this.overlay.setPosition(coordinate);
     }
 
+    renderVector() {
+        const { gasStationCollection, imageCollection } = this.options;
+        const features = gasStationCollection.map(item => {
+            const { coordinates, title, marker, id } = item.pick("id", "coordinates", "title", "marker");
+            const path = imageCollection.get(marker).get('image_path');
+            let coords = wkt(coordinates);
+            const revcords = coords.reverse();
+            const feature = new Feature({
+                title,
+                id,
+                geometry: new Point(fromLonLat(coords)),
+            });
+            feature.setStyle(
+                new Style({
+                    image: new Icon({
+                        anchor: [0.5, 46],
+                        anchorXUnits: "fraction",
+                        anchorYUnits: "pixels",
+                        src: path,
+                        size: [64, 64],
+                        scale: 0.5
+                    })
+                })
+            );
+            return feature;
+        });
+        this.vectorSource.addFeatures(features);
+    }
+
+    clearVector() {
+        this.vectorSource && this.vectorSource.clear();
+    }
+
+    clearInfo() {
+        this.$el.toggleClass('hide');
+    }
+
     initListeners() {
         const collection = this.getOption("gasStationCollection");
         this.listenTo(collection, {
@@ -187,10 +211,20 @@ export class MapView extends MnView {
             },
             'ready': (model) => {
                 this.map.on('click', this.onCloserClick);
+                this.model.set('active', model);
                 this.showOverlay(model);
-            }
+            },
+            'update': (collection) => {
+                const model = this.model.get('active');
+                if (model) {
+                    if (!collection.get(model.get('id'))) {
+                        this.model.unset('active');
+                    }
+                }
+                this.clearVector();
+                this.renderVector();
+            },
         });
-
         this.ui.closer.on('click', this.onCloserClick);
     }
-}
+};

@@ -38,6 +38,7 @@ class GasStationCollectionView extends CollectionView {
     className() {
         return 'list-group';
     }
+
     childView() {
         return GasStationView;
     }
@@ -56,6 +57,7 @@ class GasStationCollectionView extends CollectionView {
 }
 
 export class MarkerView extends View {
+
     tagName() {
         return 'div';
     }
@@ -70,16 +72,36 @@ export class MarkerView extends View {
 
     ui() {
         return {
-            's-area': '.search-area',
-            's-control': '.search-controls',
-            's-bar': '.search-bar',
-            'cter': '.container',
+            sArea: '.search-area',
+            sControl: '.search-controls',
+            sBar: '.search-bar',
+            cteR: '.container',
         };
     }
 
     regions() {
         return {
             'qlist': '.sights-list',
+        }
+    }
+
+    triggers() {
+        return {
+            'keyup .search-bar': 'data:entered',
+        }
+    }
+
+    onDataEntered(view, event) {
+        if (event.originalEvent.keyCode != 13) {
+            return
+        }
+        let searchKey = event.target.value;
+        if (searchKey.length == 0) {
+            this.collection.fetch();
+        } else {
+            this.collection.fetch({
+                url: '/api/gas_stations/?title__icontains=' + searchKey,
+            });
         }
     }
 
