@@ -41,10 +41,10 @@ export class MarkerInfoView extends View {
 
     initialize() {
         this.model = new Backbone.Model();
+        this.initListeners();
     }
 
     onRender() {
-        this.initListeners();
         this.$el.toggleClass('hide', !this.model.get('active'));
     }
 
@@ -58,7 +58,15 @@ export class MarkerInfoView extends View {
                 if (!value) {
                     this.model.unset('active');
                 }
+            },
+            'update': (collection, options) => {
+                const model = this.model.get('active');
+                if (model) {
+                    if (!collection.get(model.get('id'))) {
+                        this.model.unset('active');
+                    }
+                }
             }
         });
     }
-};
+}

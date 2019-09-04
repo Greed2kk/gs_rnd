@@ -49,6 +49,5 @@ export function wkt(coordinates) {
         .getGeometry()
         .getCoordinates()
     );
-
     return coords
 }
