@@ -75,7 +75,8 @@ WSGI_APPLICATION = 'map.wsgi.application'
 
 # using url filter by default. Need install from pypi. called "django-url-filter"
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['url_filter.integrations.drf.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['url_filter.integrations.drf.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 }
 
 # Database

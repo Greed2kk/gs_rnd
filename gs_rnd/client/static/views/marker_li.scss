@@ -3,8 +3,22 @@
     max-height: 690px;
 }
 
+.disabled {
+    background-color: #808080;
+    cursor: not-allowed;
+}
+
+.selected {
+    background-color: #337ab7;
+}
+
 .full-info {
     word-break: break-all;
+}
+
+.page-link.total {
+    border-radius: 30%;
+    background-color: rgba(153, 207, 252, 0.76);
 }
 
 .markers-info {
@@ -35,4 +49,40 @@
     border-width: thin;
     border-style: dashed;
     border-color: #99b8b8;
+}
+
+.list-group {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 600px;
+    max-width: 300px;
+}
+
+.my-stylish {
+    padding-top: 10px;
+    position: relative;
+    height: 90px;
+    width: 160px;
+    word-wrap: inherit;
+    border-radius: 10%
+}
+
+.total {
+    position: relative;
+    margin-left: 60px;
+    display: block;
+    clear: left;
+    right: 0px;
+    left: 35px;
+}
+
+.limiters {
+    position: relative;
+    bottom: -35px;
+    right: 38px;
+}
+
+.active {
+    background-color: #337ab7 !important;
+    color: white !important;
 }

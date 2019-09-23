@@ -110,6 +110,7 @@ body {
     top: 100px;
     right: 10px;
     max-width: 200px;
+    height: 800px;
     position: absolute;
     display: block;
     justify-content: center;
@@ -117,6 +118,16 @@ body {
     background-color: #eee;
     opacity: 0.9;
     border-radius: 8px;
+}
+
+.pagination {
+    position: fixed;
+    bottom: 60px;
+    top: 780px;
+    margin-top: 5px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    margin-left: 30px;
 }
 
 .search {
@@ -133,4 +144,13 @@ body {
 .list-info-gs {
     margin-bottom: 5px;
     cursor: pointer;
+}
+
+.sights-list {
+    padding-top: 10px;
+}
+
+.active {
+    background-color: #337ab7;
+    color: white;
 }
