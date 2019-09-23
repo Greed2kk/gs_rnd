@@ -185,14 +185,6 @@ export class MapView extends MnView {
     clearVector() {
         this.vectorSource && this.vectorSource.clear();
     }
-  
-    clearPopups() {
-        this.overlay.setPosition(undefined);
-    }
-  
-    clearInfo() {
-        this.$el.toggleClass('hide');
-    }
 
     initListeners() {
         const collection = this.getOption("gasStationCollection");
