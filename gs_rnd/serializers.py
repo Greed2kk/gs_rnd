@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from gs_rnd.models import Image, GasStation
+from django.contrib.auth import get_user_model
+from gs_rnd.models import Image, GasStation, Fuel, Review
 from map import settings
 
 
@@ -19,3 +20,25 @@ class GasStationSerializer(ModelSerializer):
     class Meta:
         model = GasStation
         fields = '__all__'
+
+
+class FuelSerializer(ModelSerializer):
+
+    class Meta:
+        model = Fuel
+        fields = '__all__'
+
+
+class ReviewSerializer(ModelSerializer):
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+class UserSerializer(ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email')
+        ordering = ('username',)

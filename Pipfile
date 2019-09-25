@@ -13,6 +13,10 @@ psycopg2 = "*"
 django-rest-auth = "*"
 pillow = "*"
 django-url-filter = "*"
+allauth = "*"
+allauth-account = "*"
+allauth-socialaccount = "*"
+django-allauth = "*"
 
 [requires]
 python_version = "3.7"
