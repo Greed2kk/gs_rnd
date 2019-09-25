@@ -16,7 +16,7 @@ import { Vector as VectorLayer } from "ol/layer.js";
 import _ from 'underscore';
 import { flyTo, wkt } from '../utils';
 import map_view from "../../templates/map_view.hbs";
-
+import $ from "jquery";
 
 export class MapView extends MnView {
 
@@ -125,6 +125,29 @@ export class MapView extends MnView {
             });
         });
         this.initListeners();
+        this.pointerMove();
+    }
+
+    pointerMove() {
+
+        this.map.on('pointerdrag', function(evt) {
+            this.getViewport().style.cursor = "grabbing";
+        });
+
+        this.map.on('pointerup', function(evt) {
+            this.getViewport().style.cursor = "grab";
+        });
+
+        this.map.on("pointermove", (evt) => {
+            let hit = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+                return true;
+            });
+            if (hit) {
+                this.map.getViewport().style.cursor = "pointer";
+            } else {
+                this.map.getViewport().style.cursor = "grab";
+            }
+        });
     }
 
     onBeforeDestroy() {

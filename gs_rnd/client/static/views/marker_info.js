@@ -12,9 +12,14 @@ export class MarkerInfoView extends View {
     template(data) {
         const model = data.active;
         if (model) {
-            data = model.toJSON();
-            let coords = wkt(data.coordinates);
-            data.geometry = `Координаты: <br> Lon: ${coords[0].toFixed(4)} <br> Lat: ${coords[1].toFixed(4)}`;
+            const path = data.imageCollection.get(model.get('logo')).get('image_path');
+            let cords = model.get('coordinates'); // fix
+            let addr = model.get('address'); ///fix
+            let coords = wkt(cords); //fix
+            data.geometry = `Lon: ${coords[0].toFixed(4)}<br>Lat: ${coords[1].toFixed(4)}`
+            data.address = addr; //fix
+            data.title = model.get('title');
+            data.image = path;
         }
         return marker_info(data);
     }
@@ -40,7 +45,8 @@ export class MarkerInfoView extends View {
     }
 
     initialize() {
-        this.model = new Backbone.Model();
+        this.model = new Backbone.Model({ imageCollection: this.getOption("imageCollection") });
+
         this.initListeners();
     }
 
@@ -49,8 +55,8 @@ export class MarkerInfoView extends View {
     }
 
     initListeners() {
-        const collection = this.getOption("collection");
-        this.listenTo(collection, {
+        const gasStationCollection = this.getOption("gasStationCollection");
+        this.listenTo(gasStationCollection, {
             'ready': (model) => {
                 this.model.set('active', model);
             },
@@ -59,10 +65,10 @@ export class MarkerInfoView extends View {
                     this.model.unset('active');
                 }
             },
-            'update': (collection, options) => {
+            'update': (gasStationCollection, options) => {
                 const model = this.model.get('active');
                 if (model) {
-                    if (!collection.get(model.get('id'))) {
+                    if (!gasStationCollection.get(model.get('id'))) {
                         this.model.unset('active');
                     }
                 }

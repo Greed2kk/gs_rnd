@@ -24,10 +24,10 @@
 .markers-info {
     z-index: 401;
     min-height: 50px;
-    min-width: 200px;
+    min-width: 300px;
     top: 100px;
     left: 5px;
-    max-width: 200px;
+    max-width: 300px;
     position: absolute;
     display: block;
     justify-content: center;
@@ -55,14 +55,14 @@
     overflow: scroll;
     overflow-x: hidden;
     max-height: 600px;
-    max-width: 300px;
+    max-width: 250px;
 }
 
 .my-stylish {
     padding-top: 10px;
     position: relative;
     height: 90px;
-    width: 160px;
+    width: 200px;
     word-wrap: inherit;
     border-radius: 10%
 }
@@ -85,4 +85,13 @@
 .active {
     background-color: #337ab7 !important;
     color: white !important;
+}
+
+.logo {
+    width: 200px;
+    height: 50px;
+}
+
+.ol-popup {
+    cursor: default;
 }

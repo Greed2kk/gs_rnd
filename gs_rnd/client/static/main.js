@@ -59,7 +59,9 @@ export class MainView extends View {
 
             gasStationCollection.fetch();
             this.showChildView('info', new MarkerInfoView({
-                collection: gasStationCollection,
+                gasStationCollection,
+                imageCollection,
+
             }));
             this.showChildView('list', new MarkerView({
                 collection: gasStationCollection,
