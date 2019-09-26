@@ -8,6 +8,7 @@ import { MapView } from './views/map.js';
 import { MarkerView } from './views/marker_li.js';
 import { MarkerInfoView } from './views/marker_info.js';
 import { GasStation } from './models/gas_station.js';
+import { Auth } from './views/auth.js';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './main.css';
@@ -29,6 +30,7 @@ export class MainView extends View {
                 'map': '.map-view-container',
                 'list': '.list-view-container',
                 'info': '.info-view-container',
+                'auth': '.auth-view-container',
             }
         })
         super(options);
@@ -55,9 +57,13 @@ export class MainView extends View {
 
         const gasStationCollection = new GasStationList();
         const imageCollection = new ImageList();
+
         imageCollection.fetch().then(() => {
 
+            this.showChildView('auth', new Auth({}));
+
             gasStationCollection.fetch();
+
             this.showChildView('info', new MarkerInfoView({
                 gasStationCollection,
                 imageCollection,
