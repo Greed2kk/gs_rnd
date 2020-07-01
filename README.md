@@ -13,5 +13,5 @@ gas stations rostov-on-don
 ```
   cd /gs_rnd/client/
   npm install
-  npm run build-dev
+  npm run build
 ```
